@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#d4380d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Rosso Control">
+<meta name="apple-mobile-web-app-title" content="Rosso CEO">
 <title>Rosso — Control Comercial</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Cabinet+Grotesk:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
@@ -442,53 +442,55 @@ function fetchSheet(url){
 
 // ============================================================
 // CALCULAR INDICADORES DEL DIA
+// Lee desde col G:H (venta por dia) y detalle A35+/A37+
 // ============================================================
 function calcToday(rows){
-  // Fecha de hoy en formato DD-MM-YYYY (como está en los sheets)
   const now = new Date();
   const dd = String(now.getDate()).padStart(2,'0');
   const mm = String(now.getMonth()+1).padStart(2,'0');
   const yyyy = now.getFullYear();
   const todayStr = dd+'-'+mm+'-'+yyyy;
-  const todayStr2 = dd+'/'+mm+'/'+yyyy; // formato alternativo
+  const todayStr2 = dd+'/'+mm+'/'+yyyy;
 
-  // Buscar fila header con FECHA
-  let headerIdx = -1;
+  // 1. VENTA CAPTURADA del dia — leer columna G:H (indices 6,7)
+  // Fila 0 = header FECHA/VENTA POR DIA, filas 1-23 = datos
+  let capV=0, capN=0;
+  for(let i=1;i<Math.min(25,rows.length);i++){
+    const fecha = rows[i][6]?rows[i][6].toString().trim():'';
+    if(fecha===todayStr||fecha===todayStr2){
+      const v=clp(rows[i][7]||0);
+      if(v>0){capV+=v;capN++;}
+    }
+  }
+
+  // 2. COTIZACIONES Y FACTURADO — leer detalle (buscar header FECHA en col 0)
+  let headerIdx=-1;
   for(let i=0;i<rows.length;i++){
-    if(rows[i][0]&&rows[i][0].toString().trim().toUpperCase()==='FECHA'){
+    if(rows[i][0]&&rows[i][0].toString().trim().toUpperCase()==='FECHA'&&
+       rows[i][6]&&rows[i][6].toString().trim().toUpperCase().includes('PROCESO')){
       headerIdx=i; break;
     }
   }
-  if(headerIdx<0)return {cotN:0,cotV:0,capN:0,capV:0,facN:0,facV:0,todayStr};
 
-  const hdrs = rows[headerIdx].map(h=>h.toString().trim().toUpperCase());
-  const iF=0; // FECHA siempre col 0
-  const iP=hdrs.findIndex(h=>h.includes('PROCESO'));
-  const iE=hdrs.findIndex(h=>h.includes('ESTADO DE PAGO'));
-  const iV=hdrs.findIndex(h=>h.includes('VALOR'));
+  let cotN=0,cotV=0,facN=0,facV=0;
 
-  let cotN=0,cotV=0,capN=0,capV=0,facN=0,facV=0;
+  if(headerIdx>=0){
+    const hdrs=rows[headerIdx].map(h=>h.toString().trim().toUpperCase());
+    const iP=hdrs.findIndex(h=>h.includes('PROCESO'));
+    const iE=hdrs.findIndex(h=>h.includes('ESTADO DE PAGO'));
+    const iV=hdrs.findIndex(h=>h.includes('VALOR'));
 
-  const detailRows = rows.slice(headerIdx+1);
-  for(const row of detailRows){
-    const fecha = row[iF]?row[iF].toString().trim():'';
-    if(fecha!==todayStr&&fecha!==todayStr2)continue;
-
-    const proceso = row[iP]?row[iP].toString().trim().toUpperCase():'';
-    const estado  = row[iE]?row[iE].toString().trim().toUpperCase():'';
-    const valor   = clp(row[iV]||0);
-
-    // Cotización enviada = cualquier fila con fecha de hoy que tenga valor
-    if(valor>0){
-      cotN++; cotV+=valor;
-    }
-    // Venta capturada = VENDIDA
-    if(proceso==='VENDIDA'||proceso==='COTIZACION ACEPTADA'){
-      capN++; capV+=valor;
-    }
-    // Venta facturada = estado FACTURADO
-    if(estado==='FACTURADO'){
-      facN++; facV+=valor;
+    for(let i=headerIdx+1;i<rows.length;i++){
+      const row=rows[i];
+      const fecha=row[0]?row[0].toString().trim():'';
+      if(fecha!==todayStr&&fecha!==todayStr2)continue;
+      const proceso=row[iP]?row[iP].toString().trim().toUpperCase():'';
+      const estado=row[iE]?row[iE].toString().trim().toUpperCase():'';
+      const valor=clp(row[iV]||0);
+      // Cotizaciones enviadas = cualquier fila de hoy con valor > 0
+      if(valor>0){cotN++;cotV+=valor;}
+      // Facturado
+      if(estado==='FACTURADO'&&valor>0){facN++;facV+=valor;}
     }
   }
 
