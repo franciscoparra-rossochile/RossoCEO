@@ -5,29 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#d4380d">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Rosso Control">
+<meta name="apple-mobile-web-app-title" content="Rosso">
 <title>Rosso — Control Comercial</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Cabinet+Grotesk:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f5f4f0;--bg2:#eeecea;--bg3:#e4e2dd;--ink:#1a1a16;--ink2:#5a5a52;--ink3:#9a9a90;--b:rgba(26,26,22,.1);--b2:rgba(26,26,22,.2);--red:#d4380d;--rbg:#fff1ed;--green:#237804;--gbg:#f0fff0;--yellow:#d4a017;--ybg:#fffbe6;--blue:#0958d9;--bbg:#e6f4ff;--oscar:#7c3aed;--diego:#0369a1;--benj:#b45309;--tatt:#be185d;}
+:root{--bg:#f5f4f0;--bg2:#eeecea;--bg3:#e4e2dd;--ink:#1a1a16;--ink2:#5a5a52;--ink3:#9a9a90;--b:rgba(26,26,22,.1);--b2:rgba(26,26,22,.2);--red:#d4380d;--rbg:#fff1ed;--green:#237804;--gbg:#f0fff0;--yellow:#d4a017;--ybg:#fffbe6;--blue:#0958d9;--bbg:#e6f4ff;--oscar:#7c3aed;--diego:#0369a1;--benj:#b45309;--tatt:#be185d;--pink:#9333ea;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-serif;min-height:100vh;}
 .app{max-width:1440px;margin:0 auto;padding:20px 24px 40px;}
 .hdr{display:flex;align-items:flex-end;justify-content:space-between;padding-bottom:16px;margin-bottom:20px;border-bottom:2px solid var(--ink);}
 .logo{display:flex;align-items:center;gap:14px;}
-.logo-box{width:44px;height:44px;background:var(--ink);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:var(--bg);}
-.logo-t{font-size:24px;font-weight:900;letter-spacing:-1px;line-height:1;}
-.logo-s{font-size:11px;color:var(--ink2);font-family:"IBM Plex Mono",monospace;margin-top:2px;}
+.logo-s{font-size:11px;color:var(--ink2);font-family:"IBM Plex Mono",monospace;margin-top:4px;}
 .live{display:inline-flex;align-items:center;gap:5px;font-family:"IBM Plex Mono",monospace;font-size:10px;background:var(--gbg);color:var(--green);border:1px solid var(--green);padding:3px 8px;margin-bottom:4px;}
 .ldot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 .hdr-dt{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink2);}
-.hdr-right{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
-.btn-refresh{font-family:"Cabinet Grotesk",sans-serif;font-size:11px;font-weight:700;background:transparent;border:1.5px solid var(--b2);color:var(--ink2);padding:4px 12px;cursor:pointer;}
-.btn-refresh:hover{background:var(--bg2);}
-.tabs{display:flex;margin-bottom:20px;border-bottom:2px solid var(--ink);}
-.tab{font-family:"Cabinet Grotesk",sans-serif;font-size:13px;font-weight:700;padding:8px 18px;border:none;background:transparent;color:var(--ink2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;}
+.hdr-right{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.btn-rf{font-family:"Cabinet Grotesk",sans-serif;font-size:11px;font-weight:700;background:transparent;border:1.5px solid var(--b2);color:var(--ink2);padding:4px 12px;cursor:pointer;}
+.btn-rf:hover{background:var(--bg2);}
+.tabs{display:flex;margin-bottom:20px;border-bottom:2px solid var(--ink);overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{font-family:"Cabinet Grotesk",sans-serif;font-size:13px;font-weight:700;padding:8px 18px;border:none;background:transparent;color:var(--ink2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;flex-shrink:0;}
 .tab.on{color:var(--ink);border-bottom-color:var(--ink);}
 .view{display:none;}
 .view.on{display:block;animation:fu .25s ease;}
@@ -36,18 +34,15 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
-.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px;}
 .kpi{background:white;border:1.5px solid var(--b2);padding:14px 16px;position:relative;overflow:hidden;}
 .kpi::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;}
-.kpi.gr::before{background:var(--green)}.kpi.bl::before{background:var(--blue)}.kpi.ye::before{background:var(--yellow)}.kpi.re::before{background:var(--red)}.kpi.os::before{background:var(--oscar)}.kpi.di::before{background:var(--diego)}.kpi.bn::before{background:var(--benj)}.kpi.ta::before{background:var(--tatt)}.kpi.pk::before{background:#9333ea;}
+.kpi.gr::before{background:var(--green)}.kpi.bl::before{background:var(--blue)}.kpi.ye::before{background:var(--yellow)}.kpi.re::before{background:var(--red)}.kpi.os::before{background:var(--oscar)}.kpi.di::before{background:var(--diego)}.kpi.bn::before{background:var(--benj)}.kpi.ta::before{background:var(--tatt)}.kpi.pk::before{background:var(--pink);}
 .kl{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em;}
 .kv{font-size:22px;font-weight:800;letter-spacing:-.5px;line-height:1;}
-.kv.gr{color:var(--green)}.kv.bl{color:var(--blue)}.kv.ye{color:var(--yellow)}.kv.re{color:var(--red)}.kv.os{color:var(--oscar)}.kv.di{color:var(--diego)}.kv.bn{color:var(--benj)}.kv.ta{color:var(--tatt)}.kv.pk{color:#9333ea;}
+.kv.gr{color:var(--green)}.kv.bl{color:var(--blue)}.kv.ye{color:var(--yellow)}.kv.re{color:var(--red)}.kv.os{color:var(--oscar)}.kv.di{color:var(--diego)}.kv.bn{color:var(--benj)}.kv.ta{color:var(--tatt)}.kv.pk{color:var(--pink);}
 .ks{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink3);margin-top:5px;}
-.pb{margin-top:10px;}
-.pbl{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink3);margin-bottom:4px;}
-.pbt{height:5px;background:var(--bg3);overflow:hidden;}
-.pbf{height:100%;transition:width .8s;}
+.pb{margin-top:10px;}.pbl{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink3);margin-bottom:4px;}
+.pbt{height:5px;background:var(--bg3);overflow:hidden;}.pbf{height:100%;transition:width .8s;}
 .card{background:white;border:1.5px solid var(--b2);padding:14px;margin-bottom:12px;}
 .card.nb{margin-bottom:0;}
 .tbl{width:100%;border-collapse:collapse;}
@@ -55,43 +50,41 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
 .tbl th.r{text-align:right;}
 .tbl td{font-size:12px;padding:7px 0;border-bottom:1px solid var(--b);color:var(--ink);}
 .tbl td.r{text-align:right;font-family:"IBM Plex Mono",monospace;font-weight:600;}
-.tbl td.r2{text-align:right;}
 .tbl tr:last-child td{border-bottom:none;font-weight:700;}
 .pipe-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-.pipe-l{font-size:11px;font-weight:700;width:150px;flex-shrink:0;}
+.pipe-l{font-size:11px;font-weight:700;width:140px;flex-shrink:0;}
 .pipe-t{flex:1;height:22px;background:var(--bg2);overflow:hidden;}
 .pipe-f{height:100%;transition:width .8s;}
 .pipe-v{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;width:110px;text-align:right;flex-shrink:0;}
-.bar-chart{display:flex;align-items:flex-end;gap:4px;height:70px;margin-top:10px;}
-.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
-.bar-b{width:100%;transition:height .5s;}
-.bar-d{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--ink3);text-align:center;}
 .yr-row{display:grid;grid-template-columns:50px 1fr 90px;gap:8px;align-items:center;margin-bottom:8px;}
 .yr-l{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;}
 .yr-t{height:10px;background:var(--bg2);overflow:hidden;}
 .yr-f{height:100%;transition:width .8s;}
 .yr-v{font-family:"IBM Plex Mono",monospace;font-size:11px;text-align:right;font-weight:600;}
-.alr{display:flex;gap:10px;padding:10px 12px;margin-bottom:8px;border-left:3px solid;}
-.alr.w{border-color:var(--red);background:var(--rbg);}
-.alr.ok{border-color:var(--green);background:var(--gbg);}
-.alr.info{border-color:var(--blue);background:var(--bbg);}
-.alr-t{font-size:12px;font-weight:800;}
-.alr-d{font-size:11px;color:var(--ink2);margin-top:2px;font-family:"IBM Plex Mono",monospace;}
-.tag{display:inline-block;font-size:10px;padding:1px 6px;font-family:"IBM Plex Mono",monospace;font-weight:600;}
-.tag.b{background:var(--bbg);color:var(--blue);}
-.tag.g{background:var(--gbg);color:var(--green);}
-.tag.y{background:var(--ybg);color:var(--yellow);}
-.tag.r{background:var(--rbg);color:var(--red);}
 .hist-row{display:grid;grid-template-columns:80px 1fr 100px 100px;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--b);}
 .hist-row:last-child{border-bottom:none;}
 .hist-mes{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;color:var(--ink2);}
 .hist-bar{height:8px;background:var(--bg3);overflow:hidden;}
-.hist-fill{height:100%;border-radius:0;}
+.hist-fill{height:100%;}
 .hist-val{font-family:"IBM Plex Mono",monospace;font-size:11px;text-align:right;}
 .hist-pct{font-family:"IBM Plex Mono",monospace;font-size:10px;text-align:right;color:var(--ink3);}
-.spinner{display:inline-block;width:12px;height:12px;border:2px solid var(--b2);border-top-color:var(--ink2);border-radius:50%;animation:spin 1s linear infinite;margin-right:6px;vertical-align:middle;}
-@keyframes spin{to{transform:rotate(360deg)}}
 .loading{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink3);padding:16px 0;text-align:center;}
+.sp{display:inline-block;width:10px;height:10px;border:2px solid var(--b2);border-top-color:var(--ink3);border-radius:50%;animation:spin 1s linear infinite;margin-right:4px;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:768px){
+  .app{padding:12px 12px 24px;}
+  .hdr{flex-direction:column;align-items:flex-start;gap:8px;}
+  .hdr-right{flex-direction:row;flex-wrap:wrap;align-items:center;}
+  .g4{grid-template-columns:1fr 1fr;gap:8px;}
+  .g3{grid-template-columns:1fr 1fr;gap:8px;}
+  .g2{grid-template-columns:1fr;gap:10px;}
+  .kv{font-size:18px;}
+  .kpi{padding:10px 12px;}
+  .pipe-l{width:100px;font-size:10px;}
+  .pipe-v{width:80px;font-size:10px;}
+  .tbl th,.tbl td{font-size:11px;}
+  .hist-pct{display:none;}
+}
 </style>
 </head>
 <body>
@@ -100,14 +93,12 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
 <div class="hdr">
   <div class="logo">
     <img src="data:image/png;base64,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" alt="Rosso" style="height:44px;width:auto;display:block;">
-    <div>
-      <div class="logo-s" style="margin-top:4px">Control Comercial</div>
-    </div>
+    <div><div class="logo-s">Control Comercial</div></div>
   </div>
   <div class="hdr-right">
     <div class="live"><div class="ldot"></div><span id="live-status">Cargando...</span></div>
     <div class="hdr-dt" id="dt"></div>
-    <button class="btn-refresh" onclick="refreshAll()">&#8635; Actualizar ahora</button>
+    <button class="btn-rf" onclick="refreshAll()">&#8635; Actualizar</button>
   </div>
 </div>
 
@@ -121,24 +112,23 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
 
 <!-- SUCURSAL TALCA -->
 <div class="view on" id="v0">
-  <div class="sec">Sucursal Talca &mdash; mes actual (suma todos los vendedores)</div>
-  <div class="g4">
-    <div class="kpi gr"><div class="kl">Venta capturada total</div><div class="kv gr" id="r-cap">$&mdash;</div><div class="ks">Oscar + Diego + Benj. + Tattersall</div><div class="pb"><div class="pbl"><span id="r-pct">&mdash;%</span><span>meta</span></div><div class="pbt"><div class="pbf" id="r-bar" style="background:var(--green);width:0%"></div></div></div></div>
-    <div class="kpi bl"><div class="kl">Venta facturada total</div><div class="kv bl" id="r-fac">$&mdash;</div><div class="ks">Boleta + factura emitida</div></div>
-    <div class="kpi ye"><div class="kl">Por facturar</div><div class="kv ye" id="r-xfac">$&mdash;</div><div class="ks">Capturado sin facturar aun</div></div>
-    <div class="kpi re"><div class="kl">Proyeccion cierre mes</div><div class="kv re" id="r-proy">$&mdash;</div><div class="ks">A ritmo actual combinado</div></div>
-  </div>
-
-  <div class="sec">Hoy &mdash; <span id="r-today-date"></span></div>
+  <div class="sec">Hoy &mdash; <span id="r-hoy-fecha"></span></div>
   <div class="g3" style="margin-bottom:20px">
-    <div class="kpi gr"><div class="kl">Cotizaciones enviadas hoy</div><div class="kv gr" id="r-hoy-cot">$&mdash;</div><div class="ks" id="r-hoy-cot-n">Todos los vendedores</div></div>
+    <div class="kpi gr"><div class="kl">Cotizaciones enviadas hoy</div><div class="kv gr" id="r-hoy-cot">$&mdash;</div><div class="ks" id="r-hoy-cot-n">Equipo completo</div></div>
     <div class="kpi bl"><div class="kl">Venta capturada hoy</div><div class="kv bl" id="r-hoy-cap">$&mdash;</div><div class="ks" id="r-hoy-cap-n">Suma del equipo</div></div>
     <div class="kpi ye"><div class="kl">Venta facturada hoy</div><div class="kv ye" id="r-hoy-fac">$&mdash;</div><div class="ks" id="r-hoy-fac-n">Emitido hoy</div></div>
   </div>
-  <div class="sec">Pipeline sucursal &mdash; todos los vendedores</div>
-  <div class="card" id="pipe-global" style="margin-bottom:20px">
-    <div class="loading"><span class="spinner"></span>Cargando datos...</div>
+
+  <div class="sec">Mes actual &mdash; Sucursal Talca</div>
+  <div class="g4">
+    <div class="kpi gr"><div class="kl">Total capturado</div><div class="kv gr" id="r-cap">$&mdash;</div><div class="ks">Todos los vendedores</div><div class="pb"><div class="pbl"><span id="r-pct">&mdash;%</span><span>meta</span></div><div class="pbt"><div class="pbf" id="r-bar" style="background:var(--green);width:0%"></div></div></div></div>
+    <div class="kpi bl"><div class="kl">Total facturado</div><div class="kv bl" id="r-fac">$&mdash;</div><div class="ks">Boleta + factura emitida</div></div>
+    <div class="kpi ye"><div class="kl">Por facturar</div><div class="kv ye" id="r-xfac">$&mdash;</div><div class="ks">Efectivo circulante</div></div>
+    <div class="kpi re"><div class="kl">Proyeccion cierre mes</div><div class="kv re" id="r-proy">$&mdash;</div><div class="ks">A ritmo actual</div></div>
   </div>
+
+  <div class="sec">Pipeline sucursal</div>
+  <div class="card" id="pipe-global" style="margin-bottom:20px"><div class="loading"><span class="sp"></span>Cargando...</div></div>
 
   <div class="g2">
     <div>
@@ -146,9 +136,7 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
       <div class="card nb">
         <table class="tbl">
           <thead><tr><th>Area</th><th>Vendedor</th><th class="r">Capturado</th><th class="r">Facturado</th><th class="r">X facturar</th></tr></thead>
-          <tbody id="tbl-areas">
-            <tr><td colspan="5" class="loading">Cargando...</td></tr>
-          </tbody>
+          <tbody id="tbl-areas"><tr><td colspan="5" class="loading">Cargando...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -157,15 +145,13 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
       <div class="card nb">
         <table class="tbl">
           <thead><tr><th>Vendedor</th><th class="r">Cotizado</th><th class="r">Capturado</th><th class="r">Tasa</th></tr></thead>
-          <tbody id="tbl-tasas">
-            <tr><td colspan="4" class="loading">Cargando...</td></tr>
-          </tbody>
+          <tbody id="tbl-tasas"><tr><td colspan="4" class="loading">Cargando...</td></tr></tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <div class="sec">Comparativo interanual (ventas netas &middot; RelBase)</div>
+  <div class="sec">Comparativo interanual</div>
   <div class="card" style="margin-bottom:20px">
     <div class="yr-row"><span class="yr-l">2020</span><div class="yr-t"><div class="yr-f" style="width:3%;background:var(--ink3)"></div></div><span class="yr-v">$12.9M</span></div>
     <div class="yr-row"><span class="yr-l">2021</span><div class="yr-t"><div class="yr-f" style="width:13%;background:var(--ink3)"></div></div><span class="yr-v">$52.8M</span></div>
@@ -173,142 +159,34 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
     <div class="yr-row"><span class="yr-l">2023</span><div class="yr-t"><div class="yr-f" style="width:56%;background:var(--ink2)"></div></div><span class="yr-v">$229.8M</span></div>
     <div class="yr-row"><span class="yr-l">2024</span><div class="yr-t"><div class="yr-f" style="width:80%;background:var(--blue)"></div></div><span class="yr-v">$326.7M</span></div>
     <div class="yr-row"><span class="yr-l">2025</span><div class="yr-t"><div class="yr-f" style="width:100%;background:var(--green)"></div></div><span class="yr-v">$406.9M</span></div>
-    <div style="font-size:10px;font-family:IBM Plex Mono,monospace;color:var(--ink3);margin-top:8px">Fuente: RelBase 2020-2025 &middot; 2026 se actualiza con los sheets</div>
+    <div style="font-size:10px;font-family:IBM Plex Mono,monospace;color:var(--ink3);margin-top:8px">Fuente: RelBase 2020-2025</div>
   </div>
 
-  <div class="sec">Historial mensual 2026 &mdash; sucursal</div>
-  <div class="card" id="hist-sucursal">
-    <div class="loading"><span class="spinner"></span>Cargando historial...</div>
-  </div>
+  <div class="sec">Historial mensual 2026</div>
+  <div class="card" id="hist-sucursal"><div class="loading"><span class="sp"></span>Cargando...</div></div>
 </div>
 
-<!-- OSCAR -->
+<!-- VENDOR TEMPLATE FUNCTION via JS -->
 <div class="view" id="v1">
   <div class="sec">Oscar Bahamonde &middot; Personas</div>
-  <div class="g4">
-    <div class="kpi os"><div class="kl">Total capturado</div><div class="kv os" id="o-cap">$&mdash;</div><div class="ks" id="o-meta-sub">Meta: $&mdash;</div><div class="pb"><div class="pbl"><span id="o-pct">&mdash;%</span><span>meta</span></div><div class="pbt"><div class="pbf" id="o-bar" style="background:var(--oscar);width:0%"></div></div></div></div>
-    <div class="kpi bl"><div class="kl">Total facturado</div><div class="kv bl" id="o-fac">$&mdash;</div><div class="ks">Cobrado en caja</div></div>
-    <div class="kpi ye"><div class="kl">Por facturar</div><div class="kv ye" id="o-xfac">$&mdash;</div><div class="ks">Efectivo circulante</div></div>
-    <div class="kpi gr"><div class="kl">Total cotizado</div><div class="kv gr" id="o-cot">$&mdash;</div><div class="ks">Cotizaciones enviadas</div></div>
-  </div>
-  <div class="g4" style="margin-top:-8px">
-    <div class="kpi bl"><div class="kl">Proyeccion mes</div><div class="kv bl" id="o-proy">$&mdash;</div></div>
-    <div class="kpi gr"><div class="kl">Tasa de cierre</div><div class="kv gr" id="o-tasa">&mdash;</div></div>
-    <div class="kpi ye"><div class="kl">Ticket promedio / dia</div><div class="kv ye" id="o-ticket">$&mdash;</div></div>
-    <div class="kpi re"><div class="kl">Dias restantes</div><div class="kv re" id="o-diasr">&mdash;</div><div class="ks" id="o-diast-sub">Transcurridos: &mdash;</div></div>
-  </div>
-  <div style="margin-top:12px">
-    <div class="sec">Hoy &mdash; <span id="o-today-date"></span>
-      <button onclick="debugToday()" style="margin-left:12px;font-family:IBM Plex Mono,monospace;font-size:9px;padding:2px 8px;background:transparent;border:1px solid var(--b2);cursor:pointer;color:var(--ink3)">DEBUG</button>
-    </div>
-    <div id="debug-panel" style="display:none;background:#1a1a16;color:#f0f0f0;font-family:IBM Plex Mono,monospace;font-size:10px;padding:12px;margin-bottom:10px;white-space:pre-wrap;max-height:300px;overflow-y:auto;border-radius:4px"></div>
-    <div class="g3" style="margin-bottom:12px">
-      <div class="kpi os"><div class="kl">Cotizaciones enviadas hoy</div><div class="kv os" id="o-hoy-cot">$&mdash;</div><div class="ks" id="o-hoy-cot-n">0 cotizaciones</div></div>
-      <div class="kpi gr"><div class="kl">Venta capturada hoy</div><div class="kv gr" id="o-hoy-cap">$&mdash;</div><div class="ks" id="o-hoy-cap-n">0 ventas cerradas</div></div>
-      <div class="kpi bl"><div class="kl">Venta facturada hoy</div><div class="kv bl" id="o-hoy-fac">$&mdash;</div><div class="ks" id="o-hoy-fac-n">0 facturas</div></div>
-    </div>
-  </div>
-  <div class="g2">
-    <div>
-      <div class="sec">Pipeline</div>
-      <div class="card nb" id="o-pipe"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
-    </div>
-    <div>
-      <div class="sec">Cotizaciones por tipo de servicio</div>
-      <div class="card nb" id="o-claif"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
-    </div>
-  </div>
-  <div style="margin-top:0">
-    <div class="sec">Historial mensual &mdash; Oscar</div>
-    <div class="card" id="o-hist"><div class="loading"><span class="spinner"></span>Cargando historial...</div></div>
-  </div>
+  <div id="v1-content"><div class="loading"><span class="sp"></span>Cargando...</div></div>
 </div>
-
-<!-- DIEGO -->
 <div class="view" id="v2">
-  <div class="sec">Diego Encina &middot; Licitaciones &middot; Empresas</div>
-  <div class="g4">
-    <div class="kpi di"><div class="kl">Total capturado</div><div class="kv di" id="d-cap">$&mdash;</div><div class="ks" id="d-meta-sub">Meta: $&mdash;</div><div class="pb"><div class="pbl"><span id="d-pct">&mdash;%</span><span>meta</span></div><div class="pbt"><div class="pbf" id="d-bar" style="background:var(--diego);width:0%"></div></div></div></div>
-    <div class="kpi bl"><div class="kl">Total facturado</div><div class="kv bl" id="d-fac">$&mdash;</div><div class="ks">Cobrado</div></div>
-    <div class="kpi ye"><div class="kl">Por facturar</div><div class="kv ye" id="d-xfac">$&mdash;</div><div class="ks">Efectivo circulante</div></div>
-    <div class="kpi gr"><div class="kl">Total cotizado</div><div class="kv gr" id="d-cot">$&mdash;</div><div class="ks">Cotizaciones enviadas</div></div>
-  </div>
-  <div class="g4" style="margin-top:-8px">
-    <div class="kpi bl"><div class="kl">Proyeccion mes</div><div class="kv bl" id="d-proy">$&mdash;</div></div>
-    <div class="kpi gr"><div class="kl">Tasa de cierre</div><div class="kv gr" id="d-tasa">&mdash;</div></div>
-    <div class="kpi ye"><div class="kl">Ticket promedio / dia</div><div class="kv ye" id="d-ticket">$&mdash;</div></div>
-    <div class="kpi re"><div class="kl">Dias restantes</div><div class="kv re" id="d-diasr">&mdash;</div><div class="ks" id="d-diast-sub">Transcurridos: &mdash;</div></div>
-  </div>
-  <div style="margin-top:12px">
-    <div class="sec">Hoy &mdash; <span id="d-today-date"></span></div>
-    <div class="g3" style="margin-bottom:12px">
-      <div class="kpi di"><div class="kl">Cotizaciones enviadas hoy</div><div class="kv di" id="d-hoy-cot">$&mdash;</div><div class="ks" id="d-hoy-cot-n">0 cotizaciones</div></div>
-      <div class="kpi gr"><div class="kl">Venta capturada hoy</div><div class="kv gr" id="d-hoy-cap">$&mdash;</div><div class="ks" id="d-hoy-cap-n">0 ventas cerradas</div></div>
-      <div class="kpi bl"><div class="kl">Venta facturada hoy</div><div class="kv bl" id="d-hoy-fac">$&mdash;</div><div class="ks" id="d-hoy-fac-n">0 facturas</div></div>
-    </div>
-  </div>
-  <div class="g2">
-    <div>
-      <div class="sec">Pipeline</div>
-      <div class="card nb" id="d-pipe"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
-    </div>
-    <div>
-      <div class="sec">Cotizaciones por tipo de servicio</div>
-      <div class="card nb" id="d-claif"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
-    </div>
-  </div>
-  <div style="margin-top:0">
-    <div class="sec">Historial mensual &mdash; Diego</div>
-    <div class="card" id="d-hist"><div class="loading"><span class="spinner"></span>Cargando historial...</div></div>
-  </div>
+  <div class="sec">Diego Encina &middot; Licitaciones</div>
+  <div id="v2-content"><div class="loading"><span class="sp"></span>Cargando...</div></div>
 </div>
-
-<!-- BENJAMIN -->
 <div class="view" id="v3">
   <div class="sec">Benjam&iacute;n Aguayo &middot; Ecommerce</div>
-  <div class="g4">
-    <div class="kpi bn"><div class="kl">Total capturado</div><div class="kv bn" id="b-cap">$&mdash;</div><div class="ks" id="b-meta-sub">Meta: $&mdash;</div><div class="pb"><div class="pbl"><span id="b-pct">&mdash;%</span><span>meta</span></div><div class="pbt"><div class="pbf" id="b-bar" style="background:var(--benj);width:0%"></div></div></div></div>
-    <div class="kpi bl"><div class="kl">Total facturado</div><div class="kv bl" id="b-fac">$&mdash;</div><div class="ks">Cobrado</div></div>
-    <div class="kpi ye"><div class="kl">Por facturar</div><div class="kv ye" id="b-xfac">$&mdash;</div><div class="ks">Efectivo circulante</div></div>
-    <div class="kpi gr"><div class="kl">Total cotizado</div><div class="kv gr" id="b-cot">$&mdash;</div><div class="ks">Cotizaciones enviadas</div></div>
-  </div>
-  <div class="g4" style="margin-top:-8px">
-    <div class="kpi bl"><div class="kl">Proyeccion mes</div><div class="kv bl" id="b-proy">$&mdash;</div></div>
-    <div class="kpi gr"><div class="kl">Tasa de cierre</div><div class="kv gr" id="b-tasa">&mdash;</div></div>
-    <div class="kpi ye"><div class="kl">Ticket promedio / dia</div><div class="kv ye" id="b-ticket">$&mdash;</div></div>
-    <div class="kpi re"><div class="kl">Dias restantes</div><div class="kv re" id="b-diasr">&mdash;</div><div class="ks" id="b-diast-sub">Transcurridos: &mdash;</div></div>
-  </div>
-  <div style="margin-top:12px">
-    <div class="sec">Hoy &mdash; <span id="b-today-date"></span></div>
-    <div class="g3" style="margin-bottom:12px">
-      <div class="kpi bn"><div class="kl">Cotizaciones enviadas hoy</div><div class="kv bn" id="b-hoy-cot">$&mdash;</div><div class="ks" id="b-hoy-cot-n">0 cotizaciones</div></div>
-      <div class="kpi gr"><div class="kl">Venta capturada hoy</div><div class="kv gr" id="b-hoy-cap">$&mdash;</div><div class="ks" id="b-hoy-cap-n">0 ventas cerradas</div></div>
-      <div class="kpi bl"><div class="kl">Venta facturada hoy</div><div class="kv bl" id="b-hoy-fac">$&mdash;</div><div class="ks" id="b-hoy-fac-n">0 facturas</div></div>
-    </div>
-  </div>  <div class="g2">
-    <div>
-      <div class="sec">Pipeline</div>
-      <div class="card nb" id="b-pipe"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
-    </div>
-    <div>
-      <div class="sec">Cotizaciones por tipo de servicio/producto</div>
-      <div class="card nb" id="b-claif"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
-    </div>
-  </div>
-
-  <div style="margin-top:0">
-    <div class="sec">Historial mensual &mdash; Benjam&iacute;n</div>
-    <div class="card" id="b-hist"><div class="loading"><span class="spinner"></span>Cargando historial...</div></div>
-  </div>
+  <div id="v3-content"><div class="loading"><span class="sp"></span>Cargando...</div></div>
 </div>
 
 <!-- TATTERSALL -->
 <div class="view" id="v4">
   <div class="sec">Tattersall &middot; Seguimiento flotilla</div>
   <div class="g4">
-    <div class="kpi ta"><div class="kl">Venta total capturada</div><div class="kv ta" id="t-vtotal">$&mdash;</div><div class="ks">Acept. + Espera OC + OC env. + Fact.</div></div>
-    <div class="kpi gr"><div class="kl">Total cotizado</div><div class="kv gr" id="t-cot">$&mdash;</div><div class="ks">Todo lo cotizado al cliente</div></div>
-    <div class="kpi bl"><div class="kl">Venta facturada</div><div class="kv bl" id="t-fac">$&mdash;</div><div class="ks">Ya facturado y cobrado</div></div>
+    <div class="kpi ta"><div class="kl">Venta total capturada</div><div class="kv ta" id="t-vtotal">$&mdash;</div><div class="ks">Acept.+Espera OC+OC env.+Fact.</div></div>
+    <div class="kpi gr"><div class="kl">Total cotizado</div><div class="kv gr" id="t-cot">$&mdash;</div><div class="ks">Todo lo cotizado</div></div>
+    <div class="kpi bl"><div class="kl">Venta facturada</div><div class="kv bl" id="t-fac">$&mdash;</div><div class="ks">Facturado y cobrado</div></div>
     <div class="kpi ye"><div class="kl">Espera de OC</div><div class="kv ye" id="t-oc">$&mdash;</div><div class="ks">Servicio completo, esperando OC</div></div>
   </div>
   <div class="g4" style="margin-top:-8px">
@@ -322,180 +200,125 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
     <div class="kpi bl"><div class="kl">Utilidad</div><div class="kv bl" id="t-utilidad">$&mdash;</div></div>
     <div class="kpi ye"><div class="kl">Dias promedio en taller</div><div class="kv ye" id="t-dias">&mdash;</div></div>
   </div>
-
   <div class="sec">Unidades en taller</div>
-  <div class="card">
-    <table class="tbl">
+  <div class="card" style="overflow-x:auto">
+    <table class="tbl" style="min-width:600px">
       <thead><tr><th>Patente</th><th>Vehiculo</th><th>Servicio</th><th>Gestor</th><th>Estado</th><th class="r">Dias</th></tr></thead>
-      <tbody id="t-tbody"><tr><td colspan="6" class="loading"><span class="spinner"></span>Cargando...</td></tr></tbody>
+      <tbody id="t-tbody"><tr><td colspan="6" class="loading"><span class="sp"></span>Cargando...</td></tr></tbody>
     </table>
   </div>
 </div>
 
-</div>
+</div><!-- .app -->
 
 <script>
-// ============================================================
-// URLS HARDCODEADAS — No requiere configuración
-// ============================================================
-const URLS = {
-  oscar:      'https://script.google.com/macros/s/AKfycbzsXL-ThBL0dBGCKBE0th1k2dYtc8TgxznuQUt2Mca883TVbwERCXaE5Q-5FjBHoIK2rQ/exec',
-  diego:      'https://script.google.com/macros/s/AKfycby5CdLaEC3DPjz6xTrSWOQ7QGdyGOb1rs2zZOawfw-MZHFW95QjOplsJWsumFQMZcRJ/exec',
-  benjamin:   'https://script.google.com/macros/s/AKfycbxcJOn8SZn15iOmZEqwLW5vuVFhk9Em6_zGxBPzulMBJF6Vfnhhj5zUp3utVcA4A66JKw/exec',
-  tattersall: 'https://script.google.com/macros/s/AKfycbwNLQ9ehjGAw7qNQyFKAU17wmKYziTbO0ZxddgeuWSrVfxnYBzFrFRo3S2TUa22JDyT/exec',
+const URLS={
+  oscar:'https://script.google.com/macros/s/AKfycbzsXL-ThBL0dBGCKBE0th1k2dYtc8TgxznuQUt2Mca883TVbwERCXaE5Q-5FjBHoIK2rQ/exec',
+  diego:'https://script.google.com/macros/s/AKfycby5CdLaEC3DPjz6xTrSWOQ7QGdyGOb1rs2zZOawfw-MZHFW95QjOplsJWsumFQMZcRJ/exec',
+  benjamin:'https://script.google.com/macros/s/AKfycbxcJOn8SZn15iOmZEqwLW5vuVFhk9Em6_zGxBPzulMBJF6Vfnhhj5zUp3utVcA4A66JKw/exec',
+  tattersall:'https://script.google.com/macros/s/AKfycbwNLQ9ehjGAw7qNQyFKAU17wmKYziTbO0ZxddgeuWSrVfxnYBzFrFRo3S2TUa22JDyT/exec',
 };
+const DATA={};
 
-// Estado global
-const DATA = {};
-let loadCount = 0;
-
-// ============================================================
-// UTILIDADES
-// ============================================================
+// Clock
 function tick(){
   const n=new Date();
   document.getElementById('dt').textContent=n.toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'})+' · '+n.toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 }
-tick(); setInterval(tick,1000);
+tick();setInterval(tick,1000);
 
 function setTab(i,el){
   document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('on',j===i));
   ['v0','v1','v2','v3','v4'].forEach((id,j)=>document.getElementById(id).classList.toggle('on',j===i));
 }
 
+// Format
 function fmt(v){
   if(v===null||v===undefined||v==='')return '$—';
   const n=typeof v==='number'?v:clp(v);
   if(isNaN(n))return '$—';
   return '$'+Math.round(n).toLocaleString('es-CL');
 }
-
 function clp(s){
   if(!s&&s!==0)return 0;
   const str=String(s).trim().replace(/[$\s]/g,'');
   if(!str||str===''||str==='--')return 0;
-  let clean=str;
-  if(clean.includes(',')&&clean.includes('.')){
-    const ld=clean.rfind?clean.rfind('.'):clean.lastIndexOf('.');
-    const lc=clean.lastIndexOf(',');
-    if(ld>lc)clean=clean.replace(/,/g,'');
-    else clean=clean.replace(/\./g,'').replace(',','.');
-  }else if(clean.includes(',')&&!clean.includes('.')){
-    const pts=clean.split(',');
-    if(pts.length===2&&pts[1].length<=2)clean=clean.replace(',','.');
-    else clean=clean.replace(/,/g,'');
-  }else if(clean.split('.').length>2){
-    clean=clean.replace(/\./g,'');
-  }
-  return parseFloat(clean)||0;
+  let c=str;
+  if(c.includes(',')&&c.includes('.')){
+    if(c.lastIndexOf('.')>c.lastIndexOf(','))c=c.replace(/,/g,'');
+    else c=c.replace(/\./g,'').replace(',','.');
+  }else if(c.includes(',')&&!c.includes('.')){
+    const p=c.split(',');
+    if(p.length===2&&p[1].length<=2)c=c.replace(',','.');
+    else c=c.replace(/,/g,'');
+  }else if(c.split('.').length>2)c=c.replace(/\./g,'');
+  return parseFloat(c)||0;
 }
-
 function fmtPct(s){
-  if(!s||s==='--'||s==='$0')return '—';
+  if(!s||s==='--')return '—';
   const str=String(s).trim();
-  if(str.includes('%'))return str;
+  if(str.includes('%')){const n=parseFloat(str);return isNaN(n)?str:n.toFixed(1)+'%';}
   const n=parseFloat(str.replace(/[^0-9.-]/g,''));
   if(isNaN(n))return '—';
-  if(n>0&&n<=1)return (n*100).toFixed(1)+'%';
-  return n.toFixed(1)+'%';
+  return(n>0&&n<=1)?(n*100).toFixed(1)+'%':n.toFixed(1)+'%';
 }
-
 function s(id,v){const el=document.getElementById(id);if(el)el.textContent=v;}
 
 function getKPI(rows,...labels){
   for(const label of labels){
     for(const row of rows){
-      const c0=row[0]?row[0].toString().trim().toUpperCase():'';
+      const c0=(row[0]||'').toString().trim().toUpperCase();
       if(c0===label.toUpperCase()){
         for(let i=1;i<=4;i++){
           const v=row[i];
           if(v!==undefined&&String(v).trim()!==''&&String(v).trim()!=='0.0'&&String(v).trim()!=='0')
             return String(v).trim();
         }
-        return row[1]?String(row[1]).trim():'';
       }
     }
   }
   return '';
 }
 
-// ============================================================
-// FETCH via JSONP
-// ============================================================
-function fetchSheet(url){
-  return new Promise((resolve)=>{
-    const cb='rcb_'+Date.now()+'_'+Math.random().toString(36).slice(2);
-    const script=document.createElement('script');
-    const to=setTimeout(()=>{
-      delete window[cb];
-      try{document.head.removeChild(script);}catch(e){}
-      resolve(null);
-    },15000);
-    window[cb]=(data)=>{
-      clearTimeout(to);
-      delete window[cb];
-      try{document.head.removeChild(script);}catch(e){}
-      resolve(data);
-    };
-    script.src=url+(url.includes('?')?'&':'?')+'callback='+cb+'&_='+Date.now();
-    script.onerror=()=>{clearTimeout(to);resolve(null);};
-    document.head.appendChild(script);
-  });
+// Detect if a cell value corresponds to today
+function isToday(cellVal){
+  if(!cellVal)return false;
+  const cell=cellVal.toString().trim();
+  if(!cell||cell==='FECHA')return false;
+  const now=new Date();
+  const dd=String(now.getDate()).padStart(2,'0');
+  const mm=String(now.getMonth()+1).padStart(2,'0');
+  const yyyy=String(now.getFullYear());
+  // DD-MM-YYYY or DD/MM/YYYY
+  if(cell===dd+'-'+mm+'-'+yyyy||cell===dd+'/'+mm+'/'+yyyy)return true;
+  // ISO: YYYY-MM-DD
+  if(cell.startsWith(yyyy+'-'+mm+'-'+dd))return true;
+  // JS Date string: "Wed Apr 22 2026..." - check month, day, year
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const mon=months[now.getMonth()];
+  const day=String(now.getDate());
+  if(cell.includes(mon)&&cell.includes(' '+day+' ')&&cell.includes(yyyy))return true;
+  return false;
 }
 
-// ============================================================
-// CALCULAR INDICADORES DEL DIA
-// Lee desde col G:H (venta por dia) y detalle A35+/A37+
-// ============================================================
+// Calculate today indicators from raw rows
 function calcToday(rows){
-  const now = new Date();
-  const dd = String(now.getDate()).padStart(2,'0');
-  const mm = String(now.getMonth()+1).padStart(2,'0');
-  const yyyy = now.getFullYear();
-  // Formatos posibles en col G (sheets puede devolver fecha como objeto JS serializado)
-  const todaySimple = dd+'-'+mm+'-'+yyyy;         // 22-04-2026
-  const todaySlash  = dd+'/'+mm+'/'+yyyy;          // 22/04/2026
-  const todayMonths = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const todayMonthStr = todayMonths[now.getMonth()]; // Apr
-  const todayDay = String(now.getDate());            // 22
-  const todayYear = String(now.getFullYear());       // 2026
-
-  // Función que detecta si una celda de fecha corresponde a hoy
-  function isToday(cellVal){
-    if(!cellVal)return false;
-    const s=cellVal.toString().trim();
-    if(!s||s==='FECHA')return false;
-    // Formato simple: 22-04-2026 o 22/04/2026
-    if(s===todaySimple||s===todaySlash)return true;
-    // Formato JS Date serializado: "Wed Apr 22 2026 00:00:00 GMT..."
-    // Contiene el mes abreviado, el día y el año
-    if(s.includes(todayMonthStr)&&s.includes(' '+todayDay+' ')&&s.includes(todayYear))return true;
-    // Formato ISO: 2026-04-22
-    const iso=yyyy+'-'+mm+'-'+dd;
-    if(s.startsWith(iso))return true;
-    return false;
-  }
-
-  // 1. VENTA CAPTURADA — columna G:H (indices 6,7)
-  let capV=0, capN=0;
+  // Venta capturada: col G(6) = fecha, col H(7) = monto vendido
+  let capV=0,capN=0;
   for(let i=0;i<Math.min(30,rows.length);i++){
     if(isToday(rows[i][6])){
       const v=clp(rows[i][7]||0);
-      capV+=v; if(v>0)capN++;
+      capV+=v;if(v>0)capN++;
     }
   }
-
-  // 2. COTIZACIONES Y FACTURADO — detalle desde header FECHA en col 0
+  // Cotizaciones y facturado: detalle desde header FECHA en col 0
   let headerIdx=-1;
   for(let i=0;i<rows.length;i++){
     const c0=(rows[i][0]||'').toString().trim().toUpperCase();
     const c6=(rows[i][6]||'').toString().trim().toUpperCase();
     const c8=(rows[i][8]||'').toString().trim().toUpperCase();
-    if(c0==='FECHA'&&(c6.includes('PROCESO')||c8.includes('VALOR'))){
-      headerIdx=i; break;
-    }
+    if(c0==='FECHA'&&(c6.includes('PROCESO')||c8.includes('VALOR'))){headerIdx=i;break;}
   }
-
   let cotN=0,cotV=0,facN=0,facV=0;
   if(headerIdx>=0){
     const hdrs=rows[headerIdx].map(h=>(h||'').toString().trim().toUpperCase());
@@ -503,7 +326,6 @@ function calcToday(rows){
     const iE=hdrs.findIndex(h=>h.includes('ESTADO')&&h.includes('PAGO'));
     const iVf=iV>=0?iV:8;
     const iEf=iE>=0?iE:7;
-
     for(let i=headerIdx+1;i<rows.length;i++){
       if(!isToday(rows[i][0]))continue;
       const estado=(rows[i][iEf]||'').toString().trim().toUpperCase();
@@ -512,63 +334,333 @@ function calcToday(rows){
       if(estado==='FACTURADO'&&valor>0){facN++;facV+=valor;}
     }
   }
-
-  return {cotN,cotV,capN,capV,facN,facV,todayStr:todaySimple};
+  return{cotN,cotV,capN,capV,facN,facV};
 }
 
-// DEBUG — mostrar estructura de datos recibida
-function debugToday(){
-  const panel = document.getElementById('debug-panel');
-  panel.style.display = panel.style.display==='none'?'block':'none';
-  if(!DATA.oscar||!DATA.oscar.rawRows){panel.textContent='Sin datos de Oscar aún. Espera la carga.';return;}
-  const rows = DATA.oscar.rawRows;
-  const now = new Date();
-  const dd = String(now.getDate()).padStart(2,'0');
-  const mm = String(now.getMonth()+1).padStart(2,'0');
-  const yyyy = now.getFullYear();
-  const todayStr = dd+'-'+mm+'-'+yyyy;
-  const todayStr2 = dd+'/'+mm+'/'+yyyy;
+// FETCH via JSONP
+function fetchSheet(url){
+  return new Promise(resolve=>{
+    const cb='rcb_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+    const sc=document.createElement('script');
+    const to=setTimeout(()=>{delete window[cb];try{document.head.removeChild(sc);}catch(e){}resolve(null);},15000);
+    window[cb]=data=>{
+      clearTimeout(to);delete window[cb];
+      try{document.head.removeChild(sc);}catch(e){}
+      resolve(data);
+    };
+    sc.src=url+(url.includes('?')?'&':'?')+'callback='+cb+'&_='+Date.now();
+    sc.onerror=()=>{clearTimeout(to);resolve(null);};
+    document.head.appendChild(sc);
+  });
+}
 
-  let out = 'FECHA HOY BUSCADA: '+todayStr+' / '+todayStr2+'\n';
-  out += 'TOTAL FILAS: '+rows.length+'\n\n';
+// Parse vendor (Oscar/Diego/Benjamin)
+function parseVendor(data){
+  if(!data)return null;
+  let rows,history=[];
+  if(data.current&&data.current.rows){rows=data.current.rows;history=data.history||[];}
+  else if(data.rows&&Array.isArray(data.rows))rows=data.rows;
+  else if(Array.isArray(data))rows=data;
+  else return null;
 
-  // Mostrar G:H (cols 6,7) filas 0-20
-  out += '=== G:H (indices 6,7) filas 0-20 ===\n';
-  for(let i=0;i<Math.min(20,rows.length);i++){
-    const g=(rows[i][6]||'').toString().trim();
-    const h=(rows[i][7]||'').toString().trim();
-    if(g||h) out += `  [${i}] G="${g}" H="${h}"\n`;
-  }
+  const g=(...l)=>getKPI(rows,...l);
+  const cap=clp(g('CAPTURACION DE VENTA'));
+  const meta=clp(g('META','META PERSONAS','META MENSUAL','META DE FACTURACION'));
+  const proy=clp(g('PROYECCION','PROYECCION REAL'));
+  const fac=clp(g('FACTURADO'));
+  const cot=clp(g('TOTAL COTIZACIONES ENVIADAS','TOTAL COTIZADO'));
+  const tasa=fmtPct(g('TASA DE CIERRE'));
+  const ticket=clp(g('TICKET PROMEDIO DIARIO'));
+  const diast=g('DIAS TRANSCURRIDOS','DIAS COMPLETADOS')||'--';
+  const diasr=g('DIAS RESTANTES')||'--';
+  const vendida=clp(g('VENDIDA'));
+  const enviada=clp(g('COTIZACION ENVIADA'));
+  const espera=clp(g('EN ESPERA'));
+  const seguimiento=clp(g('HACER SEGUIMIENTO'));
+  const cotizando=clp(g('COTIZANDO'));
+  const novendida=clp(g('NO VENDIDA'));
+  const xfac=cap-fac;
 
-  // Buscar header FECHA
-  out += '\n=== BUSCANDO HEADER FECHA ===\n';
+  // Clasificaciones
+  const SKIP=['META','META MENSUAL','META DIARIA','META SEMANAL','META DE FACTURACION','TATTERSALL','NEUMATICOS AGRICOLAS'];
+  let clasificaciones=[];
+  let clsIdx=-1;
   for(let i=0;i<rows.length;i++){
-    const c0=(rows[i][0]||'').toString().trim().toUpperCase();
-    if(c0==='FECHA'){
-      out += `  Header en fila ${i}: ${JSON.stringify(rows[i].slice(0,12))}\n`;
+    if(rows[i].some(c=>(c||'').toString().trim().toUpperCase()==='CLASIFICACIONES')){clsIdx=i;break;}
+  }
+  if(clsIdx>=0){
+    for(let i=clsIdx+1;i<Math.min(clsIdx+25,rows.length);i++){
+      const r=rows[i];
+      const lbl=(r[3]||r[0]||'').toString().trim();
+      const val=r[4]||r[1]||'';
+      if(lbl&&clp(val)>0&&!SKIP.includes(lbl.toUpperCase()))
+        clasificaciones.push([lbl,clp(val)]);
     }
   }
 
-  // Filas con fecha de hoy
-  out += '\n=== FILAS CON FECHA HOY (col 0) ===\n';
-  let found=0;
-  for(let i=0;i<rows.length;i++){
-    const f0=(rows[i][0]||'').toString().trim();
-    if(f0===todayStr||f0===todayStr2){
-      out += `  [${i}] ${JSON.stringify(rows[i].slice(0,10))}\n`;
-      found++;
-      if(found>15){out+='  ... (más filas)\n';break;}
-    }
-  }
-  if(found===0) out += '  NINGUNA FILA ENCONTRADA CON FECHA HOY\n';
+  // Historial
+  const historial=history.map(h=>{
+    const hr=h.rows||[];
+    return{name:h.name,cap:clp(getKPI(hr,'CAPTURACION DE VENTA')),fac:clp(getKPI(hr,'FACTURADO')),cot:clp(getKPI(hr,'TOTAL COTIZACIONES ENVIADAS','TOTAL COTIZADO'))};
+  }).filter(h=>h.cap>0||h.fac>0);
 
-  panel.textContent = out;
+  const today=calcToday(rows);
+
+  return{cap,meta,proy,fac,cot,tasa,ticket,diast,diasr,vendida,enviada,espera,seguimiento,cotizando,novendida,xfac,clasificaciones,historial,today,rawRows:rows};
 }
 
-// Auto-refresh cada 5 minutos
-setInterval(refreshAll, 5*60*1000);
+// Render vendor tab
+function renderVendorTab(tabId,prefix,d){
+  const el=document.getElementById(tabId+'-content');
+  if(!el)return;
+  const meta=d.meta||0;
+  const pct=meta>0?Math.min(100,Math.round(d.cap/meta*100)):0;
+  const now=new Date();
+  const todayLabel=now.toLocaleDateString('es-CL',{day:'numeric',month:'long'});
 
-// Cargar al iniciar
+  const pipe=()=>{
+    const vals=[d.vendida,d.enviada,d.espera,d.seguimiento,d.cotizando,d.novendida];
+    const labels=['VENDIDA','COT. ENVIADA','EN ESPERA','SEGUIMIENTO','COTIZANDO','NO VENDIDA'];
+    const colors=['var(--green)','var(--blue)','var(--yellow)','var(--ink3)','var(--ink3)','var(--red)'];
+    const maxP=Math.max(...vals,1);
+    return labels.map((l,i)=>'<div class="pipe-row"><span class="pipe-l">'+l+'</span><div class="pipe-t"><div class="pipe-f" style="width:'+Math.round(vals[i]/maxP*100)+'%;background:'+colors[i]+'"></div></div><span class="pipe-v">'+fmt(vals[i])+'</span></div>').join('');
+  };
+
+  const claif=()=>{
+    if(!d.clasificaciones||!d.clasificaciones.length)return '<div style="font-size:12px;color:var(--ink3);padding:12px 0;text-align:center">Sin datos</div>';
+    return '<table class="tbl"><thead><tr><th>Clasificacion</th><th class="r">Cotizado</th></tr></thead><tbody>'+
+      d.clasificaciones.sort((a,b)=>b[1]-a[1]).map(([l,v])=>'<tr><td>'+l+'</td><td class="r">'+fmt(v)+'</td></tr>').join('')+
+      '</tbody></table>';
+  };
+
+  const hist=()=>{
+    if(!d.historial||!d.historial.length)return '<div style="font-size:12px;color:var(--ink3);padding:12px 0;text-align:center">Actualiza el Apps Script a v4 para ver historial</div>';
+    const maxH=Math.max(...d.historial.map(h=>h.cap),d.cap,1);
+    return d.historial.map(h=>'<div class="hist-row"><span class="hist-mes">'+h.name+'</span><div class="hist-bar"><div class="hist-fill" style="width:'+Math.round(h.cap/maxH*100)+'%;background:var(--ink3)"></div></div><span class="hist-val">'+fmt(h.cap)+'</span><span class="hist-pct">'+fmt(h.fac)+'</span></div>').join('')+
+    '<div class="hist-row"><span class="hist-mes" style="color:var(--ink);font-weight:700">Mes actual</span><div class="hist-bar"><div class="hist-fill" style="width:100%;background:var(--green)"></div></div><span class="hist-val" style="color:var(--green)">'+fmt(d.cap)+'</span><span class="hist-pct">'+fmt(d.fac)+'</span></div>';
+  };
+
+  el.innerHTML=`
+  <div class="sec">Hoy &mdash; ${todayLabel}</div>
+  <div class="g3" style="margin-bottom:20px">
+    <div class="kpi ${prefix}"><div class="kl">Cotizaciones enviadas hoy</div><div class="kv ${prefix}">${fmt(d.today.cotV)}</div><div class="ks">${d.today.cotN} cotizaci${d.today.cotN===1?'ón':'ones'}</div></div>
+    <div class="kpi gr"><div class="kl">Venta capturada hoy</div><div class="kv gr">${fmt(d.today.capV)}</div><div class="ks">${d.today.capN} venta${d.today.capN===1?'':'s'} cerradas</div></div>
+    <div class="kpi bl"><div class="kl">Venta facturada hoy</div><div class="kv bl">${fmt(d.today.facV)}</div><div class="ks">${d.today.facN} factura${d.today.facN===1?'':'s'}</div></div>
+  </div>
+  <div class="sec">Mes actual</div>
+  <div class="g4">
+    <div class="kpi ${prefix}"><div class="kl">Total capturado</div><div class="kv ${prefix}">${fmt(d.cap)}</div><div class="ks">Meta: ${fmt(d.meta)}</div><div class="pb"><div class="pbl"><span>${pct}%</span><span>meta</span></div><div class="pbt"><div class="pbf" style="background:var(--${prefix==='os'?'oscar':prefix==='di'?'diego':'benj'});width:${pct}%"></div></div></div></div>
+    <div class="kpi bl"><div class="kl">Total facturado</div><div class="kv bl">${fmt(d.fac)}</div><div class="ks">Cobrado en caja</div></div>
+    <div class="kpi ye"><div class="kl">Por facturar</div><div class="kv ye">${fmt(d.xfac)}</div><div class="ks">Efectivo circulante</div></div>
+    <div class="kpi gr"><div class="kl">Total cotizado</div><div class="kv gr">${fmt(d.cot)}</div><div class="ks">Cotizaciones enviadas</div></div>
+  </div>
+  <div class="g4" style="margin-top:-8px">
+    <div class="kpi bl"><div class="kl">Proyeccion mes</div><div class="kv bl">${fmt(d.proy)}</div></div>
+    <div class="kpi gr"><div class="kl">Tasa de cierre</div><div class="kv gr">${d.tasa||'—'}</div></div>
+    <div class="kpi ye"><div class="kl">Ticket promedio / dia</div><div class="kv ye">${fmt(d.ticket)}</div></div>
+    <div class="kpi re"><div class="kl">Dias restantes</div><div class="kv re">${d.diasr}</div><div class="ks">Transcurridos: ${d.diast}</div></div>
+  </div>
+  <div class="g2">
+    <div><div class="sec">Pipeline</div><div class="card nb">${pipe()}</div></div>
+    <div><div class="sec">Cotizaciones por tipo de servicio</div><div class="card nb">${claif()}</div></div>
+  </div>
+  <div style="margin-top:12px"><div class="sec">Historial mensual</div><div class="card">${hist()}</div></div>
+  `;
+}
+
+// Tattersall
+function parseTattersall(data){
+  if(!data)return null;
+  let rows=[];
+  if(data.current&&data.current.rows)rows=data.current.rows;
+  else if(data.rows)rows=data.rows;
+  else if(Array.isArray(data))rows=data;
+
+  function getTK(label){
+    for(const row of rows){
+      const c1=(row[1]||'').toString().trim().toUpperCase();
+      const c0=(row[0]||'').toString().trim().toUpperCase();
+      if(c1===label.toUpperCase())return(row[2]||'').toString().trim();
+      if(c0===label.toUpperCase())return(row[1]||'').toString().trim();
+    }
+    return '';
+  }
+
+  const cotEnv=clp(getTK('COTIZACION ENVIADA'));
+  const cotAcep=clp(getTK('COTIZACION ACEPTADA'));
+  const espOC=clp(getTK('ESPERA DE OC'));
+  const ocEnv=clp(getTK('OC ENVIADA'));
+  const facturado=clp(getTK('FACTURADO'));
+  const cotizando=clp(getTK('COTIZANDO'));
+  const vTotal=clp(getTK('VENTA TOTAL'));
+  const utilidad=clp(getTK('UTILIDAD'));
+  const margenRaw=getTK('MARGEN');
+  const diasProm=getTK('DIAS EN TALLER PROMEDIO')||getTK('DIAS PROMEDIO')||'--';
+  const vOscar=clp(getTK('VENTAS OSCAR B'));
+  const vDiego=clp(getTK('VENTAS DIEGO E'));
+
+  const vtotalCalc=vTotal||(cotAcep+espOC+ocEnv+facturado);
+  const cotTotal=cotEnv+cotAcep+espOC+ocEnv+facturado+cotizando;
+
+  const mFmt=v=>{if(!v||v==='--')return '—';const str=String(v).trim();if(str.includes('%')){const n=parseFloat(str);return isNaN(n)?str:n.toFixed(2)+'%';}const n=parseFloat(str);if(isNaN(n))return str;return(n>0&&n<=1)?(n*100).toFixed(2)+'%':n.toFixed(2)+'%';};
+  const dFmt=v=>{if(!v||v==='--')return '—';const n=parseFloat(String(v).replace(/[^0-9.-]/g,''));return isNaN(n)?String(v):n.toFixed(1)+' días';};
+
+  let headerIdx=-1;
+  for(let i=0;i<rows.length;i++){
+    if(rows[i].some(c=>(c||'').toString().toUpperCase().includes('PATEN'))){headerIdx=i;break;}
+  }
+  let unidades=[];
+  if(headerIdx>=0){
+    const hdrs=rows[headerIdx].map(h=>(h||'').toString().trim().toUpperCase());
+    const iP=hdrs.findIndex(h=>h.includes('PATEN'));
+    const iU=hdrs.findIndex(h=>h.includes('UNIDAD'));
+    const iSv=hdrs.findIndex(h=>h.includes('SERVICIO'));
+    const iG=hdrs.findIndex(h=>h.includes('GESTOR'));
+    const iE=hdrs.findIndex(h=>h.includes('ESTADO'));
+    const iD=hdrs.findIndex(h=>h.includes('DIA')&&h.includes('TALLER'));
+    unidades=rows.slice(headerIdx+1).filter(r=>(r[iP]||'').toString().trim()!='').map(r=>({
+      patente:(r[iP]||'').toString(),unidad:(r[iU]||'').toString(),
+      servicio:(r[iSv]||'').toString(),gestor:(r[iG]||'').toString(),
+      estado:(r[iE]||'').toString(),dias:parseInt(r[iD])||0,
+    }));
+  }
+
+  return{vtotalCalc,cotTotal,facturado,espOC,cotAcep,cotEnv,vOscar,vDiego,
+    margen:mFmt(margenRaw),utilidad,diasProm:dFmt(diasProm),unidades};
+}
+
+function renderTattersall(d){
+  if(!d)return;
+  const sv=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  sv('t-vtotal',fmt(d.vtotalCalc));sv('t-cot',fmt(d.cotTotal));
+  sv('t-fac',fmt(d.facturado));sv('t-oc',fmt(d.espOC));
+  sv('t-aceptada',fmt(d.cotAcep));sv('t-enviada',fmt(d.cotEnv));
+  sv('t-oscar',fmt(d.vOscar));sv('t-diego',fmt(d.vDiego));
+  sv('t-margen',d.margen);sv('t-utilidad',fmt(d.utilidad));sv('t-dias',d.diasProm);
+
+  const tbody=document.getElementById('t-tbody');
+  if(tbody&&d.unidades.length>0){
+    tbody.innerHTML=d.unidades.slice(0,30).map(u=>{
+      const est=u.estado.toUpperCase();
+      const c=est.includes('ENTREGAD')?'var(--green)':u.dias>30?'var(--red)':u.dias>15?'var(--yellow)':'var(--blue)';
+      const gc=u.gestor.toUpperCase().includes('OSCAR')?'var(--oscar)':'var(--diego)';
+      const tag='<span style="display:inline-block;font-size:10px;padding:1px 6px;font-family:IBM Plex Mono,monospace;font-weight:600;background:var(--bbg);color:var(--blue)">'+u.patente+'</span>';
+      return'<tr><td>'+tag+'</td><td style="font-size:11px">'+u.unidad+'</td><td style="font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+u.servicio+'</td><td style="font-size:11px;color:'+gc+';font-weight:600">'+u.gestor.replace(/DIEGO ENCINA/i,'Diego E.').replace(/OSCAR BAHAMONDE/i,'Oscar B.')+'</td><td style="font-size:11px;color:'+c+';font-weight:600">'+u.estado+'</td><td class="r" style="color:'+c+'">'+u.dias+'d</td></tr>';
+    }).join('');
+  }
+}
+
+// Resumen Sucursal Talca
+function renderResumen(){
+  const o=DATA.oscar,d=DATA.diego,b=DATA.benjamin,t=DATA.tattersall;
+  if(!o&&!d&&!b)return;
+
+  const cap=(o?o.cap:0)+(d?d.cap:0)+(b?b.cap:0)+(t?t.vtotalCalc:0);
+  const fac=(o?o.fac:0)+(d?d.fac:0)+(b?b.fac:0)+(t?t.facturado:0);
+  const proy=(o?o.proy:0)+(d?d.proy:0)+(b?b.proy:0);
+  const meta=(o?o.meta:0)+(d?d.meta:0)+(b?b.meta:0);
+  const xfac=cap-fac;
+  const pct=meta>0?Math.min(100,Math.round(cap/meta*100)):0;
+
+  s('r-cap',fmt(cap));s('r-fac',fmt(fac));s('r-xfac',fmt(xfac));s('r-proy',fmt(proy));
+  s('r-pct',pct+'%');
+  const rb=document.getElementById('r-bar');if(rb)rb.style.width=pct+'%';
+
+  // Hoy sucursal
+  const now=new Date();
+  s('r-hoy-fecha',now.toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'}));
+  const oT=o?o.today:{cotN:0,cotV:0,capN:0,capV:0,facN:0,facV:0};
+  const dT=d?d.today:{cotN:0,cotV:0,capN:0,capV:0,facN:0,facV:0};
+  const bT=b?b.today:{cotN:0,cotV:0,capN:0,capV:0,facN:0,facV:0};
+  s('r-hoy-cot',fmt(oT.cotV+dT.cotV+bT.cotV));
+  s('r-hoy-cap',fmt(oT.capV+dT.capV+bT.capV));
+  s('r-hoy-fac',fmt(oT.facV+dT.facV+bT.facV));
+  s('r-hoy-cot-n',(oT.cotN+dT.cotN+bT.cotN)+' cotizaciones del equipo');
+  s('r-hoy-cap-n',(oT.capN+dT.capN+bT.capN)+' ventas cerradas hoy');
+  s('r-hoy-fac-n',(oT.facN+dT.facN+bT.facN)+' facturas emitidas hoy');
+
+  // Pipeline global
+  const pg=document.getElementById('pipe-global');
+  if(pg){
+    const vend=(o?o.vendida:0)+(d?d.vendida:0)+(b?b.vendida:0);
+    const env=(o?o.enviada:0)+(d?d.enviada:0)+(b?b.enviada:0)+(t?t.cotEnv:0);
+    const esp=(o?o.espera:0)+(d?d.espera:0)+(b?b.espera:0)+(t?t.espOC:0);
+    const seg=(o?o.seguimiento:0)+(d?d.seguimiento:0)+(b?b.seguimiento:0);
+    const cot=(o?o.cotizando:0)+(d?d.cotizando:0)+(b?b.cotizando:0);
+    const nov=(o?o.novendida:0)+(d?d.novendida:0)+(b?b.novendida:0);
+    const maxP=Math.max(vend,env,esp,seg,cot,nov,1);
+    const items=[['VENDIDA',vend,'var(--green)'],['COT. ENVIADA',env,'var(--blue)'],['EN ESPERA',esp,'var(--yellow)'],['SEGUIMIENTO',seg,'var(--ink3)'],['COTIZANDO',cot,'var(--ink3)'],['NO VENDIDA',nov,'var(--red)']];
+    pg.innerHTML=items.map(([l,v,c])=>'<div class="pipe-row"><span class="pipe-l">'+l+'</span><div class="pipe-t"><div class="pipe-f" style="width:'+Math.round(v/maxP*100)+'%;background:'+c+'"></div></div><span class="pipe-v">'+fmt(v)+'</span></div>').join('');
+  }
+
+  // Tabla areas
+  const ae=document.getElementById('tbl-areas');
+  if(ae){
+    ae.innerHTML=[
+      ['Personas','Oscar B.',o?o.cap:null,o?o.fac:null,'var(--oscar)'],
+      ['Licitaciones','Diego E.',d?d.cap:null,d?d.fac:null,'var(--diego)'],
+      ['Ecommerce','Benjamín A.',b?b.cap:null,b?b.fac:null,'var(--benj)'],
+      ['Tattersall','Diego+Oscar',t?t.vtotalCalc:null,t?t.facturado:null,'var(--tatt)'],
+    ].map(([area,vend,cap,fac,color])=>{
+      const xf=cap!==null&&fac!==null?cap-fac:null;
+      return'<tr><td><span style="color:'+color+';font-weight:700">'+area+'</span></td><td>'+vend+'</td><td class="r">'+(cap!==null?fmt(cap):'—')+'</td><td class="r">'+(fac!==null?fmt(fac):'—')+'</td><td class="r">'+(xf!==null?fmt(xf):'—')+'</td></tr>';
+    }).join('');
+  }
+
+  // Tabla tasas
+  const te=document.getElementById('tbl-tasas');
+  if(te){
+    te.innerHTML=[
+      ['Oscar B.',o?o.cot:null,o?o.cap:null,o?o.tasa:null],
+      ['Diego E.',d?d.cot:null,d?d.cap:null,d?d.tasa:null],
+      ['Benjín A.',b?b.cot:null,b?b.cap:null,b?b.tasa:null],
+    ].map(([v,cot,cap,tasa])=>'<tr><td>'+v+'</td><td class="r">'+(cot!==null?fmt(cot):'—')+'</td><td class="r">'+(cap!==null?fmt(cap):'—')+'</td><td class="r">'+(tasa||'—')+'</td></tr>').join('');
+  }
+
+  // Historial sucursal
+  const he=document.getElementById('hist-sucursal');
+  if(he){
+    const meses={};
+    [o,d,b].filter(Boolean).forEach(vendor=>{
+      (vendor.historial||[]).forEach(h=>{
+        if(!meses[h.name])meses[h.name]={cap:0,fac:0};
+        meses[h.name].cap+=h.cap;meses[h.name].fac+=h.fac;
+      });
+    });
+    const arr=Object.entries(meses);
+    if(arr.length>0){
+      const maxH=Math.max(...arr.map(([,v])=>v.cap),cap,1);
+      he.innerHTML=arr.map(([name,v])=>'<div class="hist-row"><span class="hist-mes">'+name+'</span><div class="hist-bar"><div class="hist-fill" style="width:'+Math.round(v.cap/maxH*100)+'%;background:var(--ink3)"></div></div><span class="hist-val">'+fmt(v.cap)+'</span><span class="hist-pct">'+fmt(v.fac)+'</span></div>').join('')+
+      '<div class="hist-row"><span class="hist-mes" style="color:var(--ink);font-weight:700">Mes actual</span><div class="hist-bar"><div class="hist-fill" style="width:100%;background:var(--green)"></div></div><span class="hist-val" style="color:var(--green)">'+fmt(cap)+'</span><span class="hist-pct">'+fmt(fac)+'</span></div>';
+    }else{
+      he.innerHTML='<div style="font-size:12px;color:var(--ink3);padding:12px 0;text-align:center">Actualiza el Apps Script a v4 para ver historial</div>';
+    }
+  }
+}
+
+// Load
+async function loadSheet(name){
+  const data=await fetchSheet(URLS[name]);
+  if(!data)return;
+  if(name==='tattersall'){
+    DATA.tattersall=parseTattersall(data);
+    renderTattersall(DATA.tattersall);
+  }else{
+    const prefixMap={oscar:'os',diego:'di',benjamin:'bn'};
+    const tabMap={oscar:'v1',diego:'v2',benjamin:'v3'};
+    DATA[name]=parseVendor(data);
+    renderVendorTab(tabMap[name],prefixMap[name],DATA[name]);
+  }
+  renderResumen();
+  document.getElementById('live-status').textContent='Actualizado · '+new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'});
+}
+
+async function refreshAll(){
+  document.getElementById('live-status').textContent='Actualizando...';
+  await Promise.all(['oscar','diego','benjamin','tattersall'].map(loadSheet));
+}
+
+setInterval(refreshAll,5*60*1000);
 window.onload=()=>refreshAll();
 </script>
 </body>
