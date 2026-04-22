@@ -197,16 +197,6 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
     <div class="kpi ye"><div class="kl">Ticket promedio / dia</div><div class="kv ye" id="o-ticket">$&mdash;</div></div>
     <div class="kpi re"><div class="kl">Dias restantes</div><div class="kv re" id="o-diasr">&mdash;</div><div class="ks" id="o-diast-sub">Transcurridos: &mdash;</div></div>
   </div>
-  <div class="g2">
-    <div>
-      <div class="sec">Pipeline</div>
-      <div class="card nb" id="o-pipe"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
-    </div>
-    <div>
-      <div class="sec">Cotizaciones por tipo de servicio</div>
-      <div class="card nb" id="o-claif"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
-    </div>
-  </div>
   <div style="margin-top:12px">
     <div class="sec">Hoy &mdash; <span id="o-today-date"></span>
       <button onclick="debugToday()" style="margin-left:12px;font-family:IBM Plex Mono,monospace;font-size:9px;padding:2px 8px;background:transparent;border:1px solid var(--b2);cursor:pointer;color:var(--ink3)">DEBUG</button>
@@ -216,6 +206,16 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
       <div class="kpi os"><div class="kl">Cotizaciones enviadas hoy</div><div class="kv os" id="o-hoy-cot">$&mdash;</div><div class="ks" id="o-hoy-cot-n">0 cotizaciones</div></div>
       <div class="kpi gr"><div class="kl">Venta capturada hoy</div><div class="kv gr" id="o-hoy-cap">$&mdash;</div><div class="ks" id="o-hoy-cap-n">0 ventas cerradas</div></div>
       <div class="kpi bl"><div class="kl">Venta facturada hoy</div><div class="kv bl" id="o-hoy-fac">$&mdash;</div><div class="ks" id="o-hoy-fac-n">0 facturas</div></div>
+    </div>
+  </div>
+  <div class="g2">
+    <div>
+      <div class="sec">Pipeline</div>
+      <div class="card nb" id="o-pipe"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
+    </div>
+    <div>
+      <div class="sec">Cotizaciones por tipo de servicio</div>
+      <div class="card nb" id="o-claif"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
     </div>
   </div>
   <div style="margin-top:0">
@@ -239,6 +239,14 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
     <div class="kpi ye"><div class="kl">Ticket promedio / dia</div><div class="kv ye" id="d-ticket">$&mdash;</div></div>
     <div class="kpi re"><div class="kl">Dias restantes</div><div class="kv re" id="d-diasr">&mdash;</div><div class="ks" id="d-diast-sub">Transcurridos: &mdash;</div></div>
   </div>
+  <div style="margin-top:12px">
+    <div class="sec">Hoy &mdash; <span id="d-today-date"></span></div>
+    <div class="g3" style="margin-bottom:12px">
+      <div class="kpi di"><div class="kl">Cotizaciones enviadas hoy</div><div class="kv di" id="d-hoy-cot">$&mdash;</div><div class="ks" id="d-hoy-cot-n">0 cotizaciones</div></div>
+      <div class="kpi gr"><div class="kl">Venta capturada hoy</div><div class="kv gr" id="d-hoy-cap">$&mdash;</div><div class="ks" id="d-hoy-cap-n">0 ventas cerradas</div></div>
+      <div class="kpi bl"><div class="kl">Venta facturada hoy</div><div class="kv bl" id="d-hoy-fac">$&mdash;</div><div class="ks" id="d-hoy-fac-n">0 facturas</div></div>
+    </div>
+  </div>
   <div class="g2">
     <div>
       <div class="sec">Pipeline</div>
@@ -247,14 +255,6 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
     <div>
       <div class="sec">Cotizaciones por tipo de servicio</div>
       <div class="card nb" id="d-claif"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
-    </div>
-  </div>
-  <div style="margin-top:12px">
-    <div class="sec">Hoy &mdash; <span id="d-today-date"></span></div>
-    <div class="g3" style="margin-bottom:12px">
-      <div class="kpi di"><div class="kl">Cotizaciones enviadas hoy</div><div class="kv di" id="d-hoy-cot">$&mdash;</div><div class="ks" id="d-hoy-cot-n">0 cotizaciones</div></div>
-      <div class="kpi gr"><div class="kl">Venta capturada hoy</div><div class="kv gr" id="d-hoy-cap">$&mdash;</div><div class="ks" id="d-hoy-cap-n">0 ventas cerradas</div></div>
-      <div class="kpi bl"><div class="kl">Venta facturada hoy</div><div class="kv bl" id="d-hoy-fac">$&mdash;</div><div class="ks" id="d-hoy-fac-n">0 facturas</div></div>
     </div>
   </div>
   <div style="margin-top:0">
@@ -278,7 +278,14 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
     <div class="kpi ye"><div class="kl">Ticket promedio / dia</div><div class="kv ye" id="b-ticket">$&mdash;</div></div>
     <div class="kpi re"><div class="kl">Dias restantes</div><div class="kv re" id="b-diasr">&mdash;</div><div class="ks" id="b-diast-sub">Transcurridos: &mdash;</div></div>
   </div>
-  <div class="g2">
+  <div style="margin-top:12px">
+    <div class="sec">Hoy &mdash; <span id="b-today-date"></span></div>
+    <div class="g3" style="margin-bottom:12px">
+      <div class="kpi bn"><div class="kl">Cotizaciones enviadas hoy</div><div class="kv bn" id="b-hoy-cot">$&mdash;</div><div class="ks" id="b-hoy-cot-n">0 cotizaciones</div></div>
+      <div class="kpi gr"><div class="kl">Venta capturada hoy</div><div class="kv gr" id="b-hoy-cap">$&mdash;</div><div class="ks" id="b-hoy-cap-n">0 ventas cerradas</div></div>
+      <div class="kpi bl"><div class="kl">Venta facturada hoy</div><div class="kv bl" id="b-hoy-fac">$&mdash;</div><div class="ks" id="b-hoy-fac-n">0 facturas</div></div>
+    </div>
+  </div>  <div class="g2">
     <div>
       <div class="sec">Pipeline</div>
       <div class="card nb" id="b-pipe"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
@@ -288,14 +295,7 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
       <div class="card nb" id="b-claif"><div class="loading"><span class="spinner"></span>Cargando...</div></div>
     </div>
   </div>
-  <div style="margin-top:12px">
-    <div class="sec">Hoy &mdash; <span id="b-today-date"></span></div>
-    <div class="g3" style="margin-bottom:12px">
-      <div class="kpi bn"><div class="kl">Cotizaciones enviadas hoy</div><div class="kv bn" id="b-hoy-cot">$&mdash;</div><div class="ks" id="b-hoy-cot-n">0 cotizaciones</div></div>
-      <div class="kpi gr"><div class="kl">Venta capturada hoy</div><div class="kv gr" id="b-hoy-cap">$&mdash;</div><div class="ks" id="b-hoy-cap-n">0 ventas cerradas</div></div>
-      <div class="kpi bl"><div class="kl">Venta facturada hoy</div><div class="kv bl" id="b-hoy-fac">$&mdash;</div><div class="ks" id="b-hoy-fac-n">0 facturas</div></div>
-    </div>
-  </div>
+
   <div style="margin-top:0">
     <div class="sec">Historial mensual &mdash; Benjam&iacute;n</div>
     <div class="card" id="b-hist"><div class="loading"><span class="spinner"></span>Cargando historial...</div></div>
@@ -452,457 +452,68 @@ function calcToday(rows){
   const dd = String(now.getDate()).padStart(2,'0');
   const mm = String(now.getMonth()+1).padStart(2,'0');
   const yyyy = now.getFullYear();
-  const todayStr = dd+'-'+mm+'-'+yyyy;
-  const todayStr2 = dd+'/'+mm+'/'+yyyy;
-  const todayStr3 = dd+'-0'+(now.getMonth()+1)+'-'+yyyy; // fallback
+  // Formatos posibles en col G (sheets puede devolver fecha como objeto JS serializado)
+  const todaySimple = dd+'-'+mm+'-'+yyyy;         // 22-04-2026
+  const todaySlash  = dd+'/'+mm+'/'+yyyy;          // 22/04/2026
+  const todayMonths = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const todayMonthStr = todayMonths[now.getMonth()]; // Apr
+  const todayDay = String(now.getDate());            // 22
+  const todayYear = String(now.getFullYear());       // 2026
+
+  // Función que detecta si una celda de fecha corresponde a hoy
+  function isToday(cellVal){
+    if(!cellVal)return false;
+    const s=cellVal.toString().trim();
+    if(!s||s==='FECHA')return false;
+    // Formato simple: 22-04-2026 o 22/04/2026
+    if(s===todaySimple||s===todaySlash)return true;
+    // Formato JS Date serializado: "Wed Apr 22 2026 00:00:00 GMT..."
+    // Contiene el mes abreviado, el día y el año
+    if(s.includes(todayMonthStr)&&s.includes(' '+todayDay+' ')&&s.includes(todayYear))return true;
+    // Formato ISO: 2026-04-22
+    const iso=yyyy+'-'+mm+'-'+dd;
+    if(s.startsWith(iso))return true;
+    return false;
+  }
 
   // 1. VENTA CAPTURADA — columna G:H (indices 6,7)
   let capV=0, capN=0;
   for(let i=0;i<Math.min(30,rows.length);i++){
-    const g=rows[i][6]?rows[i][6].toString().trim():'';
-    if(g===todayStr||g===todayStr2){
+    if(isToday(rows[i][6])){
       const v=clp(rows[i][7]||0);
       capV+=v; if(v>0)capN++;
     }
   }
 
-  // 2. COTIZACIONES Y FACTURADO
-  // Buscar header FECHA en col 0 de cualquier fila
+  // 2. COTIZACIONES Y FACTURADO — detalle desde header FECHA en col 0
   let headerIdx=-1;
   for(let i=0;i<rows.length;i++){
     const c0=(rows[i][0]||'').toString().trim().toUpperCase();
     const c6=(rows[i][6]||'').toString().trim().toUpperCase();
     const c8=(rows[i][8]||'').toString().trim().toUpperCase();
-    if(c0==='FECHA'&&(c6.includes('PROCESO')||c8.includes('VALOR')||c8.includes('COT'))){
+    if(c0==='FECHA'&&(c6.includes('PROCESO')||c8.includes('VALOR'))){
       headerIdx=i; break;
     }
   }
 
   let cotN=0,cotV=0,facN=0,facV=0;
   if(headerIdx>=0){
-    // Encontrar indices exactos de columnas desde el header
     const hdrs=rows[headerIdx].map(h=>(h||'').toString().trim().toUpperCase());
     const iV=hdrs.findIndex(h=>h.includes('VALOR')&&h.includes('COT'));
     const iE=hdrs.findIndex(h=>h.includes('ESTADO')&&h.includes('PAGO'));
-    const iVf=iV>=0?iV:8;  // fallback col 8
-    const iEf=iE>=0?iE:7;  // fallback col 7
+    const iVf=iV>=0?iV:8;
+    const iEf=iE>=0?iE:7;
 
     for(let i=headerIdx+1;i<rows.length;i++){
-      const row=rows[i];
-      const f0=(row[0]||'').toString().trim();
-      if(!f0||f0.length<8)continue;
-      if(f0!==todayStr&&f0!==todayStr2)continue;
-      const estado=(row[iEf]||'').toString().trim().toUpperCase();
-      const valor=clp(row[iVf]||0);
+      if(!isToday(rows[i][0]))continue;
+      const estado=(rows[i][iEf]||'').toString().trim().toUpperCase();
+      const valor=clp(rows[i][iVf]||0);
       if(valor>0){cotN++;cotV+=valor;}
       if(estado==='FACTURADO'&&valor>0){facN++;facV+=valor;}
     }
   }
 
-  // Fallback: si no encontró header, escanear todas las filas buscando fecha de hoy en col 0
-  if(headerIdx<0){
-    for(let i=0;i<rows.length;i++){
-      const f0=(rows[i][0]||'').toString().trim();
-      if(f0!==todayStr&&f0!==todayStr2)continue;
-      const estado=(rows[i][7]||'').toString().trim().toUpperCase();
-      const valor=clp(rows[i][8]||0);
-      if(valor>0){cotN++;cotV+=valor;}
-      if(estado==='FACTURADO'&&valor>0){facN++;facV+=valor;}
-    }
-  }
-
-  return {cotN,cotV,capN,capV,facN,facV,todayStr};
-}
-
-// ============================================================
-// PARSE VENDOR DATA (Oscar / Diego / Benjamin)
-// ============================================================
-function parseVendor(data){
-  if(!data)return null;
-  let rows, history=[];
-
-  // Formato v4: {current:{name,rows}, history:[{name,rows}]}
-  if(data.current&&data.current.rows){
-    rows=data.current.rows;
-    history=data.history||[];
-  }
-  // Formato v3: {rows, sheet}
-  else if(data.rows&&Array.isArray(data.rows)){
-    rows=data.rows;
-  }
-  // Formato viejo: array directo
-  else if(Array.isArray(data)){
-    rows=data;
-  }
-  else return null;
-
-  const g=(...labels)=>getKPI(rows,...labels);
-  const cap=clp(g('CAPTURACION DE VENTA'));
-  const meta=clp(g('META','META PERSONAS','META MENSUAL','META DE FACTURACION','META MENSUAL '));
-  const proy=clp(g('PROYECCION','PROYECCION REAL'));
-  const fac=clp(g('FACTURADO'));
-  const cot=clp(g('TOTAL COTIZACIONES ENVIADAS','TOTAL COTIZADO'));
-  const tasa=fmtPct(g('TASA DE CIERRE'));
-  const ticket=clp(g('TICKET PROMEDIO DIARIO'));
-  const diast=g('DIAS TRANSCURRIDOS','DIAS COMPLETADOS')||'--';
-  const diasr=g('DIAS RESTANTES')||'--';
-  const metaD=clp(g('META DIARIA'));
-  const metaS=clp(g('META SEMANAL'));
-  const vendida=clp(g('VENDIDA'));
-  const enviada=clp(g('COTIZACION ENVIADA'));
-  const espera=clp(g('EN ESPERA'));
-  const seguimiento=clp(g('HACER SEGUIMIENTO'));
-  const cotizando=clp(g('COTIZANDO'));
-  const novendida=clp(g('NO VENDIDA'));
-  const capturado_caja=clp(g('CAPTURADO'));
-  const xfac=cap-fac;
-
-  // Clasificaciones — leer cols D:E (indices 3,4) que es donde estan
-  // Row 0 col 3 = "CLASIFICACIONES" header, rows 1-14 = datos
-  let clasificaciones=[];
-  const SKIP_LABELS=['META MENSUAL','META DIARIA','META SEMANAL','META','DEBERIAMOS LLEVAR',
-    'DESVIACION','DIAS','CUMPLIMIENTO','CAPTURACION','PROYECCION','TASA','TICKET','TOTAL',
-    'PROCESO','ESTADO','VENDIDA','NO VENDIDA','COTIZANDO','EN ESPERA','FACTURADO','CAPTURADO',
-    'TATTERSALL','NEUMATICOS','ESCANER'];
-  for(let i=0;i<Math.min(20,rows.length);i++){
-    const lbl=(rows[i][3]||'').toString().trim();
-    const val=(rows[i][4]||'').toString().trim();
-    if(!lbl||lbl.toUpperCase()==='CLASIFICACIONES')continue;
-    if(SKIP_LABELS.some(s=>lbl.toUpperCase().includes(s)))continue;
-    const v=clp(val);
-    if(v>0)clasificaciones.push([lbl,v]);
-  }
-
-  // Historial de meses
-  const historial=history.map(h=>{
-    const hr=h.rows||[];
-    const hcap=clp(getKPI(hr,'CAPTURACION DE VENTA'));
-    const hfac=clp(getKPI(hr,'FACTURADO'));
-    const hcot=clp(getKPI(hr,'TOTAL COTIZACIONES ENVIADAS','TOTAL COTIZADO'));
-    return {name:h.name,cap:hcap,fac:hfac,cot:hcot};
-  }).filter(h=>h.cap>0||h.fac>0);
-
-  return {cap,meta,proy,fac,cot,tasa,ticket,diast,diasr,metaD,metaS,
-    vendida,enviada,espera,seguimiento,cotizando,novendida,
-    capturado_caja,xfac,clasificaciones,historial,rawRows:rows};
-}
-
-// ============================================================
-// RENDER VENDOR (Oscar / Diego / Benjamin)
-// ============================================================
-function renderVendor(p,d){
-  if(!d)return;
-  const meta=d.meta||0;
-  const pct=meta>0?Math.min(100,Math.round(d.cap/meta*100)):0;
-
-  s(p+'-cap',fmt(d.cap));
-  s(p+'-fac',fmt(d.fac));
-  s(p+'-xfac',fmt(d.xfac));
-  s(p+'-cot',fmt(d.cot));
-  s(p+'-proy',fmt(d.proy));
-  s(p+'-tasa',d.tasa||'—');
-  s(p+'-ticket',fmt(d.ticket));
-  s(p+'-diasr',d.diasr);
-  s(p+'-pct',pct+'%');
-  s(p+'-meta-sub','Meta: '+fmt(d.meta));
-  s(p+'-diast-sub','Transcurridos: '+d.diast);
-  const bar=document.getElementById(p+'-bar');
-  if(bar)bar.style.width=pct+'%';
-
-  // Pipeline
-  const pipeEl=document.getElementById(p+'-pipe');
-  if(pipeEl){
-    const vals=[d.vendida,d.enviada,d.espera,d.seguimiento,d.cotizando,d.novendida];
-    const maxP=Math.max(...vals,1);
-    const colors=['var(--green)','var(--blue)','var(--yellow)','var(--ink3)','var(--ink3)','var(--red)'];
-    const labels=['VENDIDA','COT. ENVIADA','EN ESPERA','SEGUIMIENTO','COTIZANDO','NO VENDIDA'];
-    pipeEl.innerHTML=labels.map((l,i)=>'<div class="pipe-row"><span class="pipe-l">'+l+'</span><div class="pipe-t"><div class="pipe-f" style="width:'+Math.round(vals[i]/maxP*100)+'%;background:'+colors[i]+'"></div></div><span class="pipe-v">'+fmt(vals[i])+'</span></div>').join('');
-  }
-
-  // Clasificaciones
-  const claifEl=document.getElementById(p+'-claif');
-  if(claifEl){
-    if(d.clasificaciones&&d.clasificaciones.length>0){
-      const maxC=Math.max(...d.clasificaciones.map(c=>c[1]),1);
-      claifEl.innerHTML='<table class="tbl"><thead><tr><th>Clasificacion</th><th class="r">Cotizado</th></tr></thead><tbody>'+
-        d.clasificaciones.sort((a,b)=>b[1]-a[1]).map(([l,v])=>'<tr><td>'+l+'</td><td class="r">'+fmt(v)+'</td></tr>').join('')+
-        '</tbody></table>';
-    }else{
-      claifEl.innerHTML='<div style="font-size:12px;color:var(--ink3);padding:12px 0;text-align:center">No se encontraron clasificaciones</div>';
-    }
-  }
-
-  // Indicadores del dia
-  const today = calcToday(d.rawRows||[]);
-  const todayLabel = today.todayStr || new Date().toLocaleDateString("es-CL");
-  const todayEl=document.getElementById(p+'-today-date');
-  if(todayEl)todayEl.textContent=todayLabel;
-  s(p+'-hoy-cot',fmt(today.cotV));
-  s(p+'-hoy-cap',fmt(today.capV));
-  s(p+'-hoy-fac',fmt(today.facV));
-  s(p+'-hoy-cot-n',today.cotN+' cotizaci'+(today.cotN===1?'ón':'ones')+' enviadas');
-  s(p+'-hoy-cap-n',today.capN+' venta'+(today.capN===1?'':'s')+' cerradas');
-  s(p+'-hoy-fac-n',today.facN+' factura'+(today.facN===1?'':'s')+' emitidas');
-
-  // Historial
-  const histEl=document.getElementById(p+'-hist');
-  if(histEl){
-    if(d.historial&&d.historial.length>0){
-      const maxH=Math.max(...d.historial.map(h=>h.cap),d.cap,1);
-      histEl.innerHTML=d.historial.map(h=>'<div class="hist-row"><span class="hist-mes">'+h.name+'</span><div class="hist-bar"><div class="hist-fill" style="width:'+Math.round(h.cap/maxH*100)+'%;background:var(--ink3)"></div></div><span class="hist-val">'+fmt(h.cap)+'</span><span class="hist-pct">Fact: '+fmt(h.fac)+'</span></div>').join('')+
-      '<div class="hist-row"><span class="hist-mes" style="color:var(--ink);font-weight:700">Mes actual</span><div class="hist-bar"><div class="hist-fill" style="width:'+Math.round(d.cap/maxH*100)+'%;background:var(--green)"></div></div><span class="hist-val" style="color:var(--green)">'+fmt(d.cap)+'</span><span class="hist-pct">Fact: '+fmt(d.fac)+'</span></div>';
-    }else{
-      histEl.innerHTML='<div style="font-size:12px;color:var(--ink3);padding:12px 0;text-align:center">Conecta el Apps Script v4 para ver historial de meses anteriores</div>';
-    }
-  }
-}
-
-// ============================================================
-// TATTERSALL
-// ============================================================
-function parseTattersall(data){
-  if(!data)return null;
-  let rows=[];
-  if(data.current&&data.current.rows)rows=data.current.rows;
-  else if(data.rows)rows=data.rows;
-  else if(Array.isArray(data))rows=data;
-
-  function getTK(label){
-    for(const row of rows){
-      const c1=row[1]?row[1].toString().trim().toUpperCase():'';
-      const c0=row[0]?row[0].toString().trim().toUpperCase():'';
-      if(c1===label.toUpperCase())return row[2]?row[2].toString().trim():'';
-      if(c0===label.toUpperCase())return row[1]?row[1].toString().trim():'';
-    }
-    return '';
-  }
-
-  const cotEnv=clp(getTK('COTIZACION ENVIADA'));
-  const cotAcep=clp(getTK('COTIZACION ACEPTADA'));
-  const espOC=clp(getTK('ESPERA DE OC'));
-  const ocEnv=clp(getTK('OC ENVIADA'));
-  const facturado=clp(getTK('FACTURADO'));
-  const cotizando=clp(getTK('COTIZANDO'));
-  const vTotal=clp(getTK('VENTA TOTAL'));
-  const costo=clp(getTK('COSTO TOTAL'));
-  const utilidad=clp(getTK('UTILIDAD'));
-  const margen=getTK('MARGEN')||'--';
-  const diasProm=getTK('DIAS EN TALLER PROMEDIO')||'--';
-  const vOscar=clp(getTK('VENTAS OSCAR B'));
-  const vDiego=clp(getTK('VENTAS DIEGO E'));
-
-  // Venta total = aceptada + espera OC + OC enviada + facturado
-  const vtotalCalc=cotAcep+espOC+ocEnv+facturado;
-  // Total cotizado = todo
-  const cotTotal=cotEnv+cotAcep+espOC+ocEnv+facturado+cotizando;
-
-  // Tabla unidades
-  let headerIdx=-1;
-  for(let i=0;i<rows.length;i++){
-    if(rows[i].some(c=>c.toString().toUpperCase().includes('PATEN'))){headerIdx=i;break;}
-  }
-
-  let unidades=[];
-  if(headerIdx>=0){
-    const hdrs=rows[headerIdx].map(h=>h.toString().trim().toUpperCase());
-    const iP=hdrs.findIndex(h=>h.includes('PATEN'));
-    const iU=hdrs.findIndex(h=>h.includes('UNIDAD'));
-    const iSv=hdrs.findIndex(h=>h.includes('SERVICIO'));
-    const iG=hdrs.findIndex(h=>h.includes('GESTOR'));
-    const iE=hdrs.findIndex(h=>h.includes('ESTADO'));
-    const iD=hdrs.findIndex(h=>h.includes('DIA')&&h.includes('TALLER'));
-    const iOC=hdrs.findIndex(h=>h.includes('ORDEN')||h.includes('OC'));
-
-    unidades=rows.slice(headerIdx+1)
-      .filter(r=>r[iP]&&r[iP].toString().trim()!='')
-      .map(r=>({
-        patente:r[iP]||'',unidad:r[iU]||'',servicio:r[iSv]||'',
-        gestor:r[iG]||'',estado:r[iE]||'',dias:parseInt(r[iD])||0,
-      }));
-  }
-
-  return {cotEnv,cotAcep,espOC,ocEnv,facturado,vtotalCalc:vTotal||vtotalCalc,
-    cotTotal,utilidad,margen,diasProm,vOscar,vDiego,unidades};
-}
-
-function renderTattersall(d){
-  if(!d)return;
-  s('t-vtotal',fmt(d.vtotalCalc));
-  s('t-cot',fmt(d.cotTotal));
-  s('t-fac',fmt(d.facturado));
-  s('t-oc',fmt(d.espOC));
-  s('t-aceptada',fmt(d.cotAcep));
-  s('t-enviada',fmt(d.cotEnv));
-  s('t-oscar',fmt(d.vOscar));
-  s('t-diego',fmt(d.vDiego));
-  const mFmt=v=>{if(!v||v==='—')return '—';const str=String(v).trim();if(str.includes('%')){const n=parseFloat(str);return isNaN(n)?str:n.toFixed(2)+'%';}const n=parseFloat(str);if(isNaN(n))return str;return(n>0&&n<=1)?(n*100).toFixed(2)+'%':n.toFixed(2)+'%';};
-  const dFmt=v=>{if(!v||v==='—')return '—';const n=parseFloat(String(v).replace(/[^0-9.-]/g,''));return isNaN(n)?String(v):n.toFixed(1)+' días';};
-  s('t-margen',mFmt(d.margen));
-  s('t-utilidad',fmt(d.utilidad));
-  s('t-dias',dFmt(d.diasProm));
-
-  const tbody=document.getElementById('t-tbody');
-  if(tbody&&d.unidades.length>0){
-    tbody.innerHTML=d.unidades.slice(0,30).map(u=>{
-      const dias=u.dias;
-      const est=u.estado.toUpperCase();
-      const color=est.includes('ENTREGAD')?'var(--green)':dias>30?'var(--red)':dias>15?'var(--yellow)':'var(--blue)';
-      const gestorColor=u.gestor.toUpperCase().includes('OSCAR')?'var(--oscar)':'var(--diego)';
-      return '<tr>'+
-        '<td><span class="tag b">'+u.patente+'</span></td>'+
-        '<td style="font-size:11px">'+u.unidad+'</td>'+
-        '<td style="font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+u.servicio+'</td>'+
-        '<td style="font-size:11px;color:'+gestorColor+';font-weight:600">'+u.gestor.replace('DIEGO ENCINA','Diego E.').replace('OSCAR BAHAMONDE','Oscar B.')+'</td>'+
-        '<td style="font-size:11px;color:'+color+';font-weight:600">'+u.estado+'</td>'+
-        '<td class="r" style="color:'+color+'">'+dias+'d</td>'+
-        '</tr>';
-    }).join('');
-  }
-}
-
-// ============================================================
-// RESUMEN SUCURSAL TALCA
-// ============================================================
-function renderResumen(){
-  const o=DATA.oscar,d=DATA.diego,b=DATA.benjamin,t=DATA.tattersall;
-  if(!o&&!d&&!b)return;
-
-  const cap=(o?o.cap:0)+(d?d.cap:0)+(b?b.cap:0)+(t?t.vtotalCalc:0);
-  const fac=(o?o.fac:0)+(d?d.fac:0)+(b?b.fac:0)+(t?t.facturado:0);
-  const proy=(o?o.proy:0)+(d?d.proy:0)+(b?b.proy:0);
-  const meta=(o?o.meta:0)+(d?d.meta:0)+(b?b.meta:0);
-  const xfac=cap-fac;
-  const pct=meta>0?Math.min(100,Math.round(cap/meta*100)):0;
-
-  s('r-cap',fmt(cap));
-  s('r-fac',fmt(fac));
-  s('r-xfac',fmt(xfac));
-  s('r-proy',fmt(proy));
-  s('r-pct',pct+'%');
-  const rbar=document.getElementById('r-bar');
-  if(rbar)rbar.style.width=pct+'%';
-
-  // Pipeline global
-  const pipeEl=document.getElementById('pipe-global');
-  if(pipeEl&&(o||d||b)){
-    const vend=(o?o.vendida:0)+(d?d.vendida:0)+(b?b.vendida:0);
-    const env=(o?o.enviada:0)+(d?d.enviada:0)+(b?b.enviada:0)+(t?t.cotEnv:0);
-    const esp=(o?o.espera:0)+(d?d.espera:0)+(b?b.espera:0)+(t?t.espOC:0);
-    const seg=(o?o.seguimiento:0)+(d?d.seguimiento:0)+(b?b.seguimiento:0);
-    const cot=(o?o.cotizando:0)+(d?d.cotizando:0)+(b?b.cotizando:0);
-    const nov=(o?o.novendida:0)+(d?d.novendida:0)+(b?b.novendida:0);
-    const maxP=Math.max(vend,env,esp,seg,cot,nov,1);
-    const items=[['VENDIDA',vend,'var(--green)'],['COT. ENVIADA',env,'var(--blue)'],['EN ESPERA',esp,'var(--yellow)'],['SEGUIMIENTO',seg,'var(--ink3)'],['COTIZANDO',cot,'var(--ink3)'],['NO VENDIDA',nov,'var(--red)']];
-    pipeEl.innerHTML=items.map(([l,v,c])=>'<div class="pipe-row"><span class="pipe-l">'+l+'</span><div class="pipe-t"><div class="pipe-f" style="width:'+Math.round(v/maxP*100)+'%;background:'+c+'"></div></div><span class="pipe-v">'+fmt(v)+'</span></div>').join('');
-  }
-
-  // Tabla áreas
-  const areaEl=document.getElementById('tbl-areas');
-  if(areaEl){
-    const rows=[
-      ['Personas','Oscar B.',o?o.cap:null,o?o.fac:null,'var(--oscar)'],
-      ['Licitaciones','Diego E.',d?d.cap:null,d?d.fac:null,'var(--diego)'],
-      ['Ecommerce','Benjamín A.',b?b.cap:null,b?b.fac:null,'var(--benj)'],
-      ['Tattersall','Diego+Oscar',t?t.vtotalCalc:null,t?t.facturado:null,'var(--tatt)'],
-    ];
-    areaEl.innerHTML=rows.map(([area,vend,cap,fac,color])=>{
-      const xf=cap!==null&&fac!==null?cap-fac:null;
-      return '<tr>'+
-        '<td><span style="color:'+color+';font-weight:700">'+area+'</span></td>'+
-        '<td>'+vend+'</td>'+
-        '<td class="r">'+(cap!==null?fmt(cap):'—')+'</td>'+
-        '<td class="r">'+(fac!==null?fmt(fac):'—')+'</td>'+
-        '<td class="r">'+(xf!==null?fmt(xf):'—')+'</td>'+
-        '</tr>';
-    }).join('');
-  }
-
-  // Tabla tasas
-  const tasaEl=document.getElementById('tbl-tasas');
-  if(tasaEl){
-    const rows=[
-      ['Oscar B.',o?o.cot:null,o?o.cap:null,o?o.tasa:null],
-      ['Diego E.',d?d.cot:null,d?d.cap:null,d?d.tasa:null],
-      ['Benjín A.',b?b.cot:null,b?b.cap:null,b?b.tasa:null],
-    ];
-    tasaEl.innerHTML=rows.map(([v,cot,cap,tasa])=>'<tr>'+
-      '<td>'+v+'</td>'+
-      '<td class="r">'+(cot!==null?fmt(cot):'—')+'</td>'+
-      '<td class="r">'+(cap!==null?fmt(cap):'—')+'</td>'+
-      '<td class="r">'+(tasa||'—')+'</td>'+
-      '</tr>').join('');
-  }
-
-  // Indicadores del dia — sumatoria
-  const rTodayEl=document.getElementById("r-today-date");
-  if(rTodayEl){
-    const now=new Date();
-    rTodayEl.textContent=now.toLocaleDateString("es-CL",{weekday:"long",day:"numeric",month:"long"});
-  }
-  const oT=o?calcToday(o.rawRows||[]):{cotN:0,cotV:0,capN:0,capV:0,facN:0,facV:0};
-  const dT=d?calcToday(d.rawRows||[]):{cotN:0,cotV:0,capN:0,capV:0,facN:0,facV:0};
-  const bT=b?calcToday(b.rawRows||[]):{cotN:0,cotV:0,capN:0,capV:0,facN:0,facV:0};
-  const rCotV=oT.cotV+dT.cotV+bT.cotV;
-  const rCapV=oT.capV+dT.capV+bT.capV;
-  const rFacV=oT.facV+dT.facV+bT.facV;
-  const rCotN=oT.cotN+dT.cotN+bT.cotN;
-  const rCapN=oT.capN+dT.capN+bT.capN;
-  const rFacN=oT.facN+dT.facN+bT.facN;
-  s("r-hoy-cot",fmt(rCotV));
-  s("r-hoy-cap",fmt(rCapV));
-  s("r-hoy-fac",fmt(rFacV));
-  s("r-hoy-cot-n",rCotN+" cotizaci"+(rCotN===1?"ón":"ones")+" del equipo");
-  s("r-hoy-cap-n",rCapN+" venta"+(rCapN===1?"":"s")+" cerradas hoy");
-  s("r-hoy-fac-n",rFacN+" factura"+(rFacN===1?"":"s")+" emitidas hoy");
-
-  // Historial sucursal — combinar meses
-  const histEl=document.getElementById('hist-sucursal');
-  if(histEl){
-    const meses={};
-    [o,d,b].filter(Boolean).forEach(vendor=>{
-      (vendor.historial||[]).forEach(h=>{
-        if(!meses[h.name])meses[h.name]={cap:0,fac:0};
-        meses[h.name].cap+=h.cap;
-        meses[h.name].fac+=h.fac;
-      });
-    });
-    const mesArr=Object.entries(meses);
-    if(mesArr.length>0){
-      const maxH=Math.max(...mesArr.map(([,v])=>v.cap),cap,1);
-      histEl.innerHTML=mesArr.map(([name,v])=>'<div class="hist-row"><span class="hist-mes">'+name+'</span><div class="hist-bar"><div class="hist-fill" style="width:'+Math.round(v.cap/maxH*100)+'%;background:var(--ink3)"></div></div><span class="hist-val">'+fmt(v.cap)+'</span><span class="hist-pct">Fact: '+fmt(v.fac)+'</span></div>').join('')+
-      '<div class="hist-row"><span class="hist-mes" style="color:var(--ink);font-weight:700">Mes actual</span><div class="hist-bar"><div class="hist-fill" style="width:100%;background:var(--green)"></div></div><span class="hist-val" style="color:var(--green)">'+fmt(cap)+'</span><span class="hist-pct">Fact: '+fmt(fac)+'</span></div>';
-    }else{
-      histEl.innerHTML='<div style="font-size:12px;color:var(--ink3);padding:12px 0;text-align:center">Actualiza el Apps Script a v4 para ver historial de meses anteriores</div>';
-    }
-  }
-}
-
-// ============================================================
-// LOAD & REFRESH
-// ============================================================
-async function loadSheet(name){
-  const url=URLS[name];
-  if(!url||url.includes('placeholder'))return;
-  const data=await fetchSheet(url);
-  if(!data)return;
-
-  if(name==='tattersall'){
-    DATA.tattersall=parseTattersall(data);
-    renderTattersall(DATA.tattersall);
-  }else{
-    const prefix={oscar:'o',diego:'d',benjamin:'b'}[name];
-    DATA[name]=parseVendor(data);
-    renderVendor(prefix,DATA[name]);
-  }
-  renderResumen();
-
-  loadCount++;
-  document.getElementById('live-status').textContent='Actualizado · '+new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'});
-}
-
-async function refreshAll(){
-  document.getElementById('live-status').textContent='Actualizando...';
-  await Promise.all(['oscar','diego','benjamin','tattersall'].map(loadSheet));
+  return {cotN,cotV,capN,capV,facN,facV,todayStr:todaySimple};
 }
 
 // DEBUG — mostrar estructura de datos recibida
