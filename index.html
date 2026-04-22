@@ -144,7 +144,7 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
       <div class="sec">Tasa de cierre por vendedor</div>
       <div class="card nb">
         <table class="tbl">
-          <thead><tr><th>Vendedor</th><th class="r">Cotizado</th><th class="r">Capturado</th><th class="r">Tasa</th></tr></thead>
+          <thead><tr><th>Vendedor</th><th class="r">Cotizado</th><th class="r">Facturado</th><th class="r">Tasa cierre</th></tr></thead>
           <tbody id="tbl-tasas"><tr><td colspan="4" class="loading">Cargando...</td></tr></tbody>
         </table>
       </div>
@@ -175,13 +175,13 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
       <span class="yr-l">2024</span><div class="yr-t"><div class="yr-f" style="width:80%;background:var(--blue)"></div></div><span class="yr-v">$326.7M</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--green);text-align:right">+42%</span>
     </div>
     <div style="display:grid;grid-template-columns:50px 1fr 90px 70px;gap:8px;align-items:center;margin-bottom:8px">
-      <span class="yr-l">2025</span><div class="yr-t"><div class="yr-f" style="width:100%;background:var(--green)"></div></div><span class="yr-v">$368.1M</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--green);text-align:right">+25%</span>
+      <span class="yr-l">2025</span><div class="yr-t"><div class="yr-f" style="width:100%;background:var(--green)"></div></div><span class="yr-v">$407.2M</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--green);text-align:right">+25%</span>
     </div>
     <div style="display:grid;grid-template-columns:50px 1fr 90px 70px;gap:8px;align-items:center;margin-bottom:4px">
       <span class="yr-l" style="color:var(--green);font-weight:800">2026</span><div class="yr-t"><div class="yr-f" id="bar-2026" style="width:0%;background:var(--green);opacity:0.7"></div></div><span class="yr-v" id="val-2026" style="color:var(--green)">$&mdash;</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;text-align:right" id="pct-2026">&mdash;</span>
     </div>
     <div style="font-size:10px;font-family:IBM Plex Mono,monospace;color:var(--ink3);margin-top:8px;display:flex;align-items:center;justify-content:space-between">
-      <span>Fuente: RelBase &middot; 2026 actualizado al 22-04-2026</span>
+      <span>Fuente: RelBase &middot; Total ventas con IVA &middot; Actualizado 22-04-2026</span>
       <label style="cursor:pointer;font-size:10px;color:var(--blue);border:1px solid var(--blue);padding:2px 8px;font-family:IBM Plex Mono,monospace;">
         &#8679; Actualizar con RelBase
         <input type="file" accept=".xlsx,.csv" style="display:none" onchange="loadRelbase(this)">
@@ -680,23 +680,23 @@ function renderResumen(){
   const he=document.getElementById('hist-sucursal');
   if(he){
     // Datos reales 2025 por mes (RelBase)
-    // Datos 2025 reales desde RelBase (Precio neto real, actualizado 22-04-2026)
+    // Datos 2025 reales RelBase — Total ventas con IVA
     const datos2025={
-      'Enero':  {v2025:24708874},
-      'Febrero':{v2025:16149494},
-      'Marzo':  {v2025:40303045},
-      'Abril':  {v2025:24670960},
-      'Mayo':   {v2025:24881837},
-      'Junio':  {v2025:23111073},
-      'Julio':  {v2025:29057403},
-      'Agosto': {v2025:36602710},
-      'Septiembre':{v2025:32979389},
-      'Octubre':{v2025:37444551},
-      'Noviembre':{v2025:30963264},
-      'Diciembre':{v2025:47197186},
+      'Enero':  {v2025:25615266},
+      'Febrero':{v2025:17238672},
+      'Marzo':  {v2025:42668674},
+      'Abril':  {v2025:26157740},
+      'Mayo':   {v2025:26016240},
+      'Junio':  {v2025:23509530},
+      'Julio':  {v2025:30443958},
+      'Agosto': {v2025:39435371},
+      'Septiembre':{v2025:35913490},
+      'Octubre':{v2025:47604650},
+      'Noviembre':{v2025:35013762},
+      'Diciembre':{v2025:57536615},
     };
-    // Datos 2026 reales RelBase (pre-cargados, se actualizan con upload)
-    const relbase2026={0:39305249,1:45325418,2:35932126,3:31992577};
+    // Datos 2026 reales RelBase — Total ventas con IVA (actualizado 22-04-2026)
+    const relbase2026={0:50616348,1:59894983,2:49569588,3:40315380};
     const mesNames=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
     const mesMap={
       'ENE':0,'FEB':1,'MAR':2,'ABR':3,'MAY':4,'JUN':5,'JUL':6,'AGO':7,'SEP':8,'OCT':9,'NOV':10,'DIC':11,
@@ -705,26 +705,12 @@ function renderResumen(){
       'ENERO 2025':0,'FEBRERO 2025':1,'MARZO 2025':2,'ABRIL 2025':3,'MAYO 2025':4,'JUNIO 2025':5,'JULIO 2025':6,'AGOSTO 2025':7,'SEPTIEMBRE 2025':8,'OCTUBRE 2025':9,'NOVIEMBRE 2025':10,'DICIEMBRE 2025':11,
     };
 
-    // Combinar datos RelBase 2026 pre-cargados con datos de los sheets
+    // Usar solo datos RelBase 2026 pre-cargados (fuente más confiable)
     const v2026=Object.assign({},relbase2026);
-    // Sobrescribir con datos más recientes de los sheets si los hay
-    [o,d,b].filter(Boolean).forEach(vendor=>{
-      (vendor.historial||[]).forEach(h=>{
-        const key=h.name.toString().trim().toUpperCase().replace(/\s+/g,' ');
-        const idx=mesMap[key];
-        if(idx!==undefined&&idx>=0&&idx<=11){
-          // Solo usar sheets si tienen dato mayor (más actualizado)
-          if(!v2026[idx]||h.fac>v2026[idx])v2026[idx]=h.fac;
-        }
-      });
-    });
-
     const mesActual=new Date().getMonth(); // 0-based
-    // El mes actual usa el dato RelBase pre-cargado como base
-    if(!v2026[mesActual])v2026[mesActual]=fac;
 
-    // Actualizar barra 2026 en interanual
-    const total2026=Object.values(v2026).reduce((a,b)=>a+b,0);
+    // Total 2026 = suma de meses RelBase pre-cargados
+    const total2026=Object.values(relbase2026).reduce((a,b)=>a+b,0);
     const b26=document.getElementById('bar-2026');
     const v26el=document.getElementById('val-2026');
     const p26el=document.getElementById('pct-2026');
@@ -734,7 +720,7 @@ function renderResumen(){
       // Proyectar a año completo basado en meses transcurridos
       const mesesTransc=mesActual+1;
       const proyAnual=total2026/mesesTransc*12;
-      const pct=Math.round((proyAnual/368069786-1)*100);
+      const pct=Math.round((proyAnual/407153968-1)*100);
       p26el.textContent=(pct>=0?'+':'')+pct+'%';
       p26el.style.color=pct>=0?'var(--green)':'var(--red)';
     }
@@ -766,7 +752,7 @@ function renderResumen(){
           +'<span style="font-family:IBM Plex Mono,monospace;font-size:11px;text-align:right;font-weight:600;color:'+color+'">'+(varPct>=0?'+':'')+varPct+'%</span>'
           +'</div>';
       }
-      rows2026html+='<div style="font-size:10px;font-family:IBM Plex Mono,monospace;color:var(--ink3);margin-top:8px">2025 fuente: RelBase &middot; 2026 fuente: sheets de vendedores &middot; Gris=2025, Color=2026</div>';
+      rows2026html+='<div style="font-size:10px;font-family:IBM Plex Mono,monospace;color:var(--ink3);margin-top:8px">2025 y 2026 fuente: RelBase &middot; Total ventas con IVA &middot; Gris=2025, Color=2026</div>';
       he.innerHTML=rows2026html;
     }else{
       he.innerHTML='<div style="font-size:12px;color:var(--ink3);padding:12px 0;text-align:center">Actualiza el Apps Script a v4 para ver comparativo mensual</div>';
