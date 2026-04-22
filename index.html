@@ -208,7 +208,10 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
     </div>
   </div>
   <div style="margin-top:12px">
-    <div class="sec">Hoy &mdash; <span id="o-today-date"></span></div>
+    <div class="sec">Hoy &mdash; <span id="o-today-date"></span>
+      <button onclick="debugToday()" style="margin-left:12px;font-family:IBM Plex Mono,monospace;font-size:9px;padding:2px 8px;background:transparent;border:1px solid var(--b2);cursor:pointer;color:var(--ink3)">DEBUG</button>
+    </div>
+    <div id="debug-panel" style="display:none;background:#1a1a16;color:#f0f0f0;font-family:IBM Plex Mono,monospace;font-size:10px;padding:12px;margin-bottom:10px;white-space:pre-wrap;max-height:300px;overflow-y:auto;border-radius:4px"></div>
     <div class="g3" style="margin-bottom:12px">
       <div class="kpi os"><div class="kl">Cotizaciones enviadas hoy</div><div class="kv os" id="o-hoy-cot">$&mdash;</div><div class="ks" id="o-hoy-cot-n">0 cotizaciones</div></div>
       <div class="kpi gr"><div class="kl">Venta capturada hoy</div><div class="kv gr" id="o-hoy-cap">$&mdash;</div><div class="ks" id="o-hoy-cap-n">0 ventas cerradas</div></div>
@@ -900,6 +903,55 @@ async function loadSheet(name){
 async function refreshAll(){
   document.getElementById('live-status').textContent='Actualizando...';
   await Promise.all(['oscar','diego','benjamin','tattersall'].map(loadSheet));
+}
+
+// DEBUG — mostrar estructura de datos recibida
+function debugToday(){
+  const panel = document.getElementById('debug-panel');
+  panel.style.display = panel.style.display==='none'?'block':'none';
+  if(!DATA.oscar||!DATA.oscar.rawRows){panel.textContent='Sin datos de Oscar aún. Espera la carga.';return;}
+  const rows = DATA.oscar.rawRows;
+  const now = new Date();
+  const dd = String(now.getDate()).padStart(2,'0');
+  const mm = String(now.getMonth()+1).padStart(2,'0');
+  const yyyy = now.getFullYear();
+  const todayStr = dd+'-'+mm+'-'+yyyy;
+  const todayStr2 = dd+'/'+mm+'/'+yyyy;
+
+  let out = 'FECHA HOY BUSCADA: '+todayStr+' / '+todayStr2+'\n';
+  out += 'TOTAL FILAS: '+rows.length+'\n\n';
+
+  // Mostrar G:H (cols 6,7) filas 0-20
+  out += '=== G:H (indices 6,7) filas 0-20 ===\n';
+  for(let i=0;i<Math.min(20,rows.length);i++){
+    const g=(rows[i][6]||'').toString().trim();
+    const h=(rows[i][7]||'').toString().trim();
+    if(g||h) out += `  [${i}] G="${g}" H="${h}"\n`;
+  }
+
+  // Buscar header FECHA
+  out += '\n=== BUSCANDO HEADER FECHA ===\n';
+  for(let i=0;i<rows.length;i++){
+    const c0=(rows[i][0]||'').toString().trim().toUpperCase();
+    if(c0==='FECHA'){
+      out += `  Header en fila ${i}: ${JSON.stringify(rows[i].slice(0,12))}\n`;
+    }
+  }
+
+  // Filas con fecha de hoy
+  out += '\n=== FILAS CON FECHA HOY (col 0) ===\n';
+  let found=0;
+  for(let i=0;i<rows.length;i++){
+    const f0=(rows[i][0]||'').toString().trim();
+    if(f0===todayStr||f0===todayStr2){
+      out += `  [${i}] ${JSON.stringify(rows[i].slice(0,10))}\n`;
+      found++;
+      if(found>15){out+='  ... (más filas)\n';break;}
+    }
+  }
+  if(found===0) out += '  NINGUNA FILA ENCONTRADA CON FECHA HOY\n';
+
+  panel.textContent = out;
 }
 
 // Auto-refresh cada 5 minutos
