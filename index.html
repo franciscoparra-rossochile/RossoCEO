@@ -286,28 +286,43 @@ function isToday(cellVal){
   const cell=cellVal.toString().trim();
   if(!cell||cell==='FECHA')return false;
   const now=new Date();
-  const dd=String(now.getDate()).padStart(2,'0');
-  const mm=String(now.getMonth()+1).padStart(2,'0');
+  const d=now.getDate();
+  const m=now.getMonth()+1;
   const yyyy=String(now.getFullYear());
-  // DD-MM-YYYY or DD/MM/YYYY
-  if(cell===dd+'-'+mm+'-'+yyyy||cell===dd+'/'+mm+'/'+yyyy)return true;
+  const dd=String(d).padStart(2,'0');
+  const mm=String(m).padStart(2,'0');
+  // DD-MM-YYYY or DD/MM/YYYY (con ceros)
+  if(cell===dd+'-'+mm+'-'+yyyy||cell===dd+'/'+mm+'-'+yyyy)return true;
+  if(cell===dd+'/'+mm+'/'+yyyy||cell===dd+'-'+mm+'/'+yyyy)return true;
+  // D/M/YYYY o D-M-YYYY (sin ceros — formato de Diego)
+  if(cell===d+'/'+m+'/'+yyyy||cell===d+'-'+m+'-'+yyyy)return true;
+  if(cell===d+'/'+m+'-'+yyyy||cell===d+'-'+m+'/'+yyyy)return true;
   // ISO: YYYY-MM-DD
   if(cell.startsWith(yyyy+'-'+mm+'-'+dd))return true;
-  // JS Date string: "Wed Apr 22 2026..." - check month, day, year
+  // JS Date string: "Wed Apr 22 2026 00:00:00 GMT..."
   const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const mon=months[now.getMonth()];
-  const day=String(now.getDate());
-  if(cell.includes(mon)&&cell.includes(' '+day+' ')&&cell.includes(yyyy))return true;
+  if(cell.includes(mon)&&cell.includes(' '+d+' ')&&cell.includes(yyyy))return true;
   return false;
 }
 
 // Calculate today indicators from raw rows
 function calcToday(rows){
-  // Venta capturada: col G(6) = fecha, col H(7) = monto vendido
+  // Venta capturada: buscar tabla fecha/venta en cols G:H (6,7) o H:I (7,8)
   let capV=0,capN=0;
+  // Detectar qué columna tiene la tabla de venta por dia
+  // Buscar header FECHA en fila 0 cols 6 o 7
+  let colFecha=6,colVenta=7;
+  for(let i=0;i<Math.min(5,rows.length);i++){
+    const c7=(rows[i][7]||'').toString().trim().toUpperCase();
+    const c8=(rows[i][8]||'').toString().trim().toUpperCase();
+    if(c7==='FECHA'||(c8.includes('VENTA')&&c8.includes('DIA'))){
+      colFecha=7;colVenta=8;break;
+    }
+  }
   for(let i=0;i<Math.min(30,rows.length);i++){
-    if(isToday(rows[i][6])){
-      const v=clp(rows[i][7]||0);
+    if(isToday(rows[i][colFecha])){
+      const v=clp(rows[i][colVenta]||0);
       capV+=v;if(v>0)capN++;
     }
   }
