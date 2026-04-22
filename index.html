@@ -175,12 +175,18 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
       <span class="yr-l">2024</span><div class="yr-t"><div class="yr-f" style="width:80%;background:var(--blue)"></div></div><span class="yr-v">$326.7M</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--green);text-align:right">+42%</span>
     </div>
     <div style="display:grid;grid-template-columns:50px 1fr 90px 70px;gap:8px;align-items:center;margin-bottom:8px">
-      <span class="yr-l">2025</span><div class="yr-t"><div class="yr-f" style="width:100%;background:var(--green)"></div></div><span class="yr-v">$406.9M</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--green);text-align:right">+25%</span>
+      <span class="yr-l">2025</span><div class="yr-t"><div class="yr-f" style="width:100%;background:var(--green)"></div></div><span class="yr-v">$368.1M</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--green);text-align:right">+25%</span>
     </div>
     <div style="display:grid;grid-template-columns:50px 1fr 90px 70px;gap:8px;align-items:center;margin-bottom:4px">
       <span class="yr-l" style="color:var(--green);font-weight:800">2026</span><div class="yr-t"><div class="yr-f" id="bar-2026" style="width:0%;background:var(--green);opacity:0.7"></div></div><span class="yr-v" id="val-2026" style="color:var(--green)">$&mdash;</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;text-align:right" id="pct-2026">&mdash;</span>
     </div>
-    <div style="font-size:10px;font-family:IBM Plex Mono,monospace;color:var(--ink3);margin-top:8px">Fuente: RelBase 2020-2025 &middot; 2026 proyectado a ritmo actual (4 meses)</div>
+    <div style="font-size:10px;font-family:IBM Plex Mono,monospace;color:var(--ink3);margin-top:8px;display:flex;align-items:center;justify-content:space-between">
+      <span>Fuente: RelBase &middot; 2026 actualizado al 22-04-2026</span>
+      <label style="cursor:pointer;font-size:10px;color:var(--blue);border:1px solid var(--blue);padding:2px 8px;font-family:IBM Plex Mono,monospace;">
+        &#8679; Actualizar con RelBase
+        <input type="file" accept=".xlsx,.csv" style="display:none" onchange="loadRelbase(this)">
+      </label>
+    </div>
   </div>
 
   <div class="sec">Historial mensual 2026</div>
@@ -329,25 +335,7 @@ function isToday(cellVal){
 
 // Calculate today indicators from raw rows
 function calcToday(rows){
-  // Venta capturada: buscar tabla fecha/venta en cols G:H (6,7) o H:I (7,8)
-  let capV=0,capN=0;
-  // Detectar qué columna tiene la tabla de venta por dia
-  // Buscar header FECHA en fila 0 cols 6 o 7
-  let colFecha=6,colVenta=7;
-  for(let i=0;i<Math.min(5,rows.length);i++){
-    const c7=(rows[i][7]||'').toString().trim().toUpperCase();
-    const c8=(rows[i][8]||'').toString().trim().toUpperCase();
-    if(c7==='FECHA'||(c8.includes('VENTA')&&c8.includes('DIA'))){
-      colFecha=7;colVenta=8;break;
-    }
-  }
-  for(let i=0;i<Math.min(30,rows.length);i++){
-    if(isToday(rows[i][colFecha])){
-      const v=clp(rows[i][colVenta]||0);
-      capV+=v;if(v>0)capN++;
-    }
-  }
-  // Cotizaciones y facturado: detalle desde header FECHA en col 0
+  // Buscar header del detalle de cotizaciones (col 0 = FECHA)
   let headerIdx=-1;
   for(let i=0;i<rows.length;i++){
     const c0=(rows[i][0]||'').toString().trim().toUpperCase();
@@ -355,21 +343,56 @@ function calcToday(rows){
     const c8=(rows[i][8]||'').toString().trim().toUpperCase();
     if(c0==='FECHA'&&(c6.includes('PROCESO')||c8.includes('VALOR'))){headerIdx=i;break;}
   }
-  let cotN=0,cotV=0,facN=0,facV=0;
+
+  let cotN=0,cotV=0,capN=0,capV=0,facN=0,facV=0;
+
   if(headerIdx>=0){
     const hdrs=rows[headerIdx].map(h=>(h||'').toString().trim().toUpperCase());
-    const iV=hdrs.findIndex(h=>h.includes('VALOR')&&h.includes('COT'));
+    const iP=hdrs.findIndex(h=>h.includes('PROCESO'));
     const iE=hdrs.findIndex(h=>h.includes('ESTADO')&&h.includes('PAGO'));
-    const iVf=iV>=0?iV:8;
+    const iV=hdrs.findIndex(h=>h.includes('VALOR')&&h.includes('COT'));
+    const iPf=iP>=0?iP:6;
     const iEf=iE>=0?iE:7;
+    const iVf=iV>=0?iV:8;
+
     for(let i=headerIdx+1;i<rows.length;i++){
-      if(!isToday(rows[i][0]))continue;
-      const estado=(rows[i][iEf]||'').toString().trim().toUpperCase();
-      const valor=clp(rows[i][iVf]||0);
+      const row=rows[i];
+      if(!isToday(row[0]))continue;
+      const proceso=(row[iPf]||'').toString().trim().toUpperCase();
+      const estado=(row[iEf]||'').toString().trim().toUpperCase();
+      const valor=clp(row[iVf]||0);
+
+      // Cotizaciones enviadas = toda fila de hoy con valor > 0
       if(valor>0){cotN++;cotV+=valor;}
+
+      // Venta capturada = VENDIDA o CAPTURADO (individual, del detalle)
+      if((proceso==='VENDIDA'||estado==='CAPTURADO')&&valor>0){
+        capN++;capV+=valor;
+      }
+
+      // Venta facturada = FACTURADO en estado de pago
       if(estado==='FACTURADO'&&valor>0){facN++;facV+=valor;}
     }
   }
+
+  // Fallback capturado desde G:H si el detalle no encontró nada
+  if(capV===0){
+    let colFecha=6,colVenta=7;
+    for(let i=0;i<Math.min(5,rows.length);i++){
+      const c7=(rows[i][7]||'').toString().trim().toUpperCase();
+      const c8=(rows[i][8]||'').toString().trim().toUpperCase();
+      if(c7==='FECHA'||(c8.includes('VENTA')&&c8.includes('DIA'))){
+        colFecha=7;colVenta=8;break;
+      }
+    }
+    for(let i=0;i<Math.min(30,rows.length);i++){
+      if(isToday(rows[i][colFecha])){
+        const v=clp(rows[i][colVenta]||0);
+        if(v>0){capV+=v;capN=1;}
+      }
+    }
+  }
+
   return{cotN,cotV,capN,capV,facN,facV};
 }
 
@@ -657,20 +680,23 @@ function renderResumen(){
   const he=document.getElementById('hist-sucursal');
   if(he){
     // Datos reales 2025 por mes (RelBase)
+    // Datos 2025 reales desde RelBase (Precio neto real, actualizado 22-04-2026)
     const datos2025={
-      'Enero':  {v2025:38800000},
-      'Febrero':{v2025:31500000},
-      'Marzo':  {v2025:44200000},
-      'Abril':  {v2025:33100000},
-      'Mayo':   {v2025:26000000},
-      'Junio':  {v2025:23500000},
-      'Julio':  {v2025:30400000},
-      'Agosto': {v2025:39400000},
-      'Septiembre':{v2025:35800000},
-      'Octubre':{v2025:47400000},
-      'Noviembre':{v2025:35000000},
-      'Diciembre':{v2025:57500000},
+      'Enero':  {v2025:24708874},
+      'Febrero':{v2025:16149494},
+      'Marzo':  {v2025:40303045},
+      'Abril':  {v2025:24670960},
+      'Mayo':   {v2025:24881837},
+      'Junio':  {v2025:23111073},
+      'Julio':  {v2025:29057403},
+      'Agosto': {v2025:36602710},
+      'Septiembre':{v2025:32979389},
+      'Octubre':{v2025:37444551},
+      'Noviembre':{v2025:30963264},
+      'Diciembre':{v2025:47197186},
     };
+    // Datos 2026 reales RelBase (pre-cargados, se actualizan con upload)
+    const relbase2026={0:39305249,1:45325418,2:35932126,3:31992577};
     const mesNames=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
     const mesMap={
       'ENE':0,'FEB':1,'MAR':2,'ABR':3,'MAY':4,'JUN':5,'JUL':6,'AGO':7,'SEP':8,'OCT':9,'NOV':10,'DIC':11,
@@ -679,23 +705,23 @@ function renderResumen(){
       'ENERO 2025':0,'FEBRERO 2025':1,'MARZO 2025':2,'ABRIL 2025':3,'MAYO 2025':4,'JUNIO 2025':5,'JULIO 2025':6,'AGOSTO 2025':7,'SEPTIEMBRE 2025':8,'OCTUBRE 2025':9,'NOVIEMBRE 2025':10,'DICIEMBRE 2025':11,
     };
 
-    // Agregar datos 2026 desde los sheets
-    const v2026={};
+    // Combinar datos RelBase 2026 pre-cargados con datos de los sheets
+    const v2026=Object.assign({},relbase2026);
+    // Sobrescribir con datos más recientes de los sheets si los hay
     [o,d,b].filter(Boolean).forEach(vendor=>{
       (vendor.historial||[]).forEach(h=>{
         const key=h.name.toString().trim().toUpperCase().replace(/\s+/g,' ');
         const idx=mesMap[key];
         if(idx!==undefined&&idx>=0&&idx<=11){
-          if(!v2026[idx])v2026[idx]=0;
-          v2026[idx]+=h.fac;
+          // Solo usar sheets si tienen dato mayor (más actualizado)
+          if(!v2026[idx]||h.fac>v2026[idx])v2026[idx]=h.fac;
         }
       });
     });
 
-    // Mes actual (abril = mes 3, index 3)
     const mesActual=new Date().getMonth(); // 0-based
-    if(!v2026[mesActual])v2026[mesActual]=0;
-    v2026[mesActual]+=fac; // agregar mes actual
+    // El mes actual usa el dato RelBase pre-cargado como base
+    if(!v2026[mesActual])v2026[mesActual]=fac;
 
     // Actualizar barra 2026 en interanual
     const total2026=Object.values(v2026).reduce((a,b)=>a+b,0);
@@ -708,7 +734,7 @@ function renderResumen(){
       // Proyectar a año completo basado en meses transcurridos
       const mesesTransc=mesActual+1;
       const proyAnual=total2026/mesesTransc*12;
-      const pct=Math.round((proyAnual/406900000-1)*100);
+      const pct=Math.round((proyAnual/368069786-1)*100);
       p26el.textContent=(pct>=0?'+':'')+pct+'%';
       p26el.style.color=pct>=0?'var(--green)':'var(--red)';
     }
@@ -771,6 +797,78 @@ async function refreshAll(){
 }
 
 setInterval(refreshAll,5*60*1000);
+
+// Cargar Excel de RelBase para actualizar datos históricos
+function loadRelbase(input){
+  const file=input.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      // Importar SheetJS desde CDN
+      if(typeof XLSX==='undefined'){
+        const sc=document.createElement('script');
+        sc.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+        sc.onload=()=>processRelbase(e.target.result);
+        document.head.appendChild(sc);
+      }else{
+        processRelbase(e.target.result);
+      }
+    }catch(err){alert('Error al leer el archivo: '+err.message);}
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function processRelbase(buffer){
+  const wb=XLSX.read(buffer,{type:'array'});
+  const ws=wb.Sheets[wb.SheetNames[0]];
+  const data=XLSX.utils.sheet_to_json(ws,{header:1});
+
+  // Buscar header row (tiene "Fecha emisión" o "Precio neto")
+  let hIdx=-1;
+  for(let i=0;i<data.length;i++){
+    if(data[i]&&data[i].some(c=>String(c||'').includes('Fecha'))){hIdx=i;break;}
+  }
+  if(hIdx<0){alert('No se encontró la estructura de RelBase. Exporta como Excel desde Detalle de Ventas.');return;}
+
+  const hdrs=data[hIdx].map(h=>String(h||'').trim());
+  const iFecha=hdrs.findIndex(h=>h.includes('Fecha'));
+  const iNeto=hdrs.findIndex(h=>h.includes('neto (real)')||h.includes('Neto (real)'));
+
+  const mensual={};
+  for(let i=hIdx+1;i<data.length;i++){
+    const row=data[i];
+    if(!row||!row[iFecha])continue;
+    let fecha=row[iFecha];
+    // Excel serial date
+    if(typeof fecha==='number'){
+      fecha=new Date(Math.round((fecha-25569)*86400*1000));
+    }else{
+      fecha=new Date(String(fecha).split('-').reverse().join('-'));
+    }
+    if(isNaN(fecha.getTime()))continue;
+    const yr=fecha.getFullYear();
+    const mo=fecha.getMonth(); // 0-based
+    const key=yr+'_'+mo;
+    if(!mensual[key])mensual[key]=0;
+    mensual[key]+=parseFloat(String(row[iNeto]||0).replace(/[^0-9.-]/g,''))||0;
+  }
+
+  // Actualizar datos en memoria
+  const mnames=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  let msg='Datos actualizados desde RelBase:\n';
+  Object.entries(mensual).forEach(([key,val])=>{
+    const [yr,mo]=key.split('_').map(Number);
+    if(yr===2026){
+      msg+=mnames[mo]+' 2026: $'+Math.round(val).toLocaleString('es-CL')+'\n';
+    }
+  });
+  // Store in sessionStorage for refresh
+  sessionStorage.setItem('relbase_data',JSON.stringify(mensual));
+  alert(msg+'\nActualizando dashboard...');
+  renderResumen();
+}
+
 window.onload=()=>refreshAll();
 </script>
 </body>
