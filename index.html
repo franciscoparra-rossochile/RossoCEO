@@ -151,15 +151,36 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
     </div>
   </div>
 
-  <div class="sec">Comparativo interanual</div>
+  <div class="sec">Comparativo interanual &mdash; ventas netas (RelBase)</div>
   <div class="card" style="margin-bottom:20px">
-    <div class="yr-row"><span class="yr-l">2020</span><div class="yr-t"><div class="yr-f" style="width:3%;background:var(--ink3)"></div></div><span class="yr-v">$12.9M</span></div>
-    <div class="yr-row"><span class="yr-l">2021</span><div class="yr-t"><div class="yr-f" style="width:13%;background:var(--ink3)"></div></div><span class="yr-v">$52.8M</span></div>
-    <div class="yr-row"><span class="yr-l">2022</span><div class="yr-t"><div class="yr-f" style="width:30%;background:var(--ink3)"></div></div><span class="yr-v">$120.9M</span></div>
-    <div class="yr-row"><span class="yr-l">2023</span><div class="yr-t"><div class="yr-f" style="width:56%;background:var(--ink2)"></div></div><span class="yr-v">$229.8M</span></div>
-    <div class="yr-row"><span class="yr-l">2024</span><div class="yr-t"><div class="yr-f" style="width:80%;background:var(--blue)"></div></div><span class="yr-v">$326.7M</span></div>
-    <div class="yr-row"><span class="yr-l">2025</span><div class="yr-t"><div class="yr-f" style="width:100%;background:var(--green)"></div></div><span class="yr-v">$406.9M</span></div>
-    <div style="font-size:10px;font-family:IBM Plex Mono,monospace;color:var(--ink3);margin-top:8px">Fuente: RelBase 2020-2025</div>
+    <div style="display:grid;grid-template-columns:50px 1fr 90px 70px;gap:8px;align-items:center;margin-bottom:4px">
+      <span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--ink3)">Año</span>
+      <span></span>
+      <span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--ink3);text-align:right">Ventas</span>
+      <span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--ink3);text-align:right">vs anterior</span>
+    </div>
+    <div style="display:grid;grid-template-columns:50px 1fr 90px 70px;gap:8px;align-items:center;margin-bottom:8px">
+      <span class="yr-l">2020</span><div class="yr-t"><div class="yr-f" style="width:3%;background:var(--ink3)"></div></div><span class="yr-v">$12.9M</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--ink3);text-align:right">&mdash;</span>
+    </div>
+    <div style="display:grid;grid-template-columns:50px 1fr 90px 70px;gap:8px;align-items:center;margin-bottom:8px">
+      <span class="yr-l">2021</span><div class="yr-t"><div class="yr-f" style="width:13%;background:var(--ink3)"></div></div><span class="yr-v">$52.8M</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--green);text-align:right">+309%</span>
+    </div>
+    <div style="display:grid;grid-template-columns:50px 1fr 90px 70px;gap:8px;align-items:center;margin-bottom:8px">
+      <span class="yr-l">2022</span><div class="yr-t"><div class="yr-f" style="width:30%;background:var(--ink3)"></div></div><span class="yr-v">$120.9M</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--green);text-align:right">+129%</span>
+    </div>
+    <div style="display:grid;grid-template-columns:50px 1fr 90px 70px;gap:8px;align-items:center;margin-bottom:8px">
+      <span class="yr-l">2023</span><div class="yr-t"><div class="yr-f" style="width:56%;background:var(--ink2)"></div></div><span class="yr-v">$229.8M</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--green);text-align:right">+90%</span>
+    </div>
+    <div style="display:grid;grid-template-columns:50px 1fr 90px 70px;gap:8px;align-items:center;margin-bottom:8px">
+      <span class="yr-l">2024</span><div class="yr-t"><div class="yr-f" style="width:80%;background:var(--blue)"></div></div><span class="yr-v">$326.7M</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--green);text-align:right">+42%</span>
+    </div>
+    <div style="display:grid;grid-template-columns:50px 1fr 90px 70px;gap:8px;align-items:center;margin-bottom:8px">
+      <span class="yr-l">2025</span><div class="yr-t"><div class="yr-f" style="width:100%;background:var(--green)"></div></div><span class="yr-v">$406.9M</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--green);text-align:right">+25%</span>
+    </div>
+    <div style="display:grid;grid-template-columns:50px 1fr 90px 70px;gap:8px;align-items:center;margin-bottom:4px">
+      <span class="yr-l" style="color:var(--green);font-weight:800">2026</span><div class="yr-t"><div class="yr-f" id="bar-2026" style="width:0%;background:var(--green);opacity:0.7"></div></div><span class="yr-v" id="val-2026" style="color:var(--green)">$&mdash;</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;text-align:right" id="pct-2026">&mdash;</span>
+    </div>
+    <div style="font-size:10px;font-family:IBM Plex Mono,monospace;color:var(--ink3);margin-top:8px">Fuente: RelBase 2020-2025 &middot; 2026 proyectado a ritmo actual (4 meses)</div>
   </div>
 
   <div class="sec">Historial mensual 2026</div>
@@ -632,23 +653,97 @@ function renderResumen(){
     ].map(([v,cot,cap,tasa])=>'<tr><td>'+v+'</td><td class="r">'+(cot!==null?fmt(cot):'—')+'</td><td class="r">'+(cap!==null?fmt(cap):'—')+'</td><td class="r">'+(tasa||'—')+'</td></tr>').join('');
   }
 
-  // Historial sucursal
+  // Historial sucursal: comparativo 2025 vs 2026 mes a mes
   const he=document.getElementById('hist-sucursal');
   if(he){
-    const meses={};
+    // Datos reales 2025 por mes (RelBase)
+    const datos2025={
+      'Enero':  {v2025:38800000},
+      'Febrero':{v2025:31500000},
+      'Marzo':  {v2025:44200000},
+      'Abril':  {v2025:33100000},
+      'Mayo':   {v2025:26000000},
+      'Junio':  {v2025:23500000},
+      'Julio':  {v2025:30400000},
+      'Agosto': {v2025:39400000},
+      'Septiembre':{v2025:35800000},
+      'Octubre':{v2025:47400000},
+      'Noviembre':{v2025:35000000},
+      'Diciembre':{v2025:57500000},
+    };
+    const mesNames=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    const mesMap={
+      'ENE':0,'FEB':1,'MAR':2,'ABR':3,'MAY':4,'JUN':5,'JUL':6,'AGO':7,'SEP':8,'OCT':9,'NOV':10,'DIC':11,
+      'ENERO':0,'FEBRERO':1,'MARZO':2,'ABRIL':3,'MAYO':4,'JUNIO':5,'JULIO':6,'AGOSTO':7,'SEPTIEMBRE':8,'OCTUBRE':9,'NOVIEMBRE':10,'DICIEMBRE':11,
+      'ENERO2026':0,'FEBRERO26':1,'MARZO26':2,'ABRIL26':3,'ENE2026':0,'FEB26':1,'MAR26':2,'ABR26':3,
+      'ENERO 2025':0,'FEBRERO 2025':1,'MARZO 2025':2,'ABRIL 2025':3,'MAYO 2025':4,'JUNIO 2025':5,'JULIO 2025':6,'AGOSTO 2025':7,'SEPTIEMBRE 2025':8,'OCTUBRE 2025':9,'NOVIEMBRE 2025':10,'DICIEMBRE 2025':11,
+    };
+
+    // Agregar datos 2026 desde los sheets
+    const v2026={};
     [o,d,b].filter(Boolean).forEach(vendor=>{
       (vendor.historial||[]).forEach(h=>{
-        if(!meses[h.name])meses[h.name]={cap:0,fac:0};
-        meses[h.name].cap+=h.cap;meses[h.name].fac+=h.fac;
+        const key=h.name.toString().trim().toUpperCase().replace(/\s+/g,' ');
+        const idx=mesMap[key];
+        if(idx!==undefined&&idx>=0&&idx<=11){
+          if(!v2026[idx])v2026[idx]=0;
+          v2026[idx]+=h.fac;
+        }
       });
     });
-    const arr=Object.entries(meses);
-    if(arr.length>0){
-      const maxH=Math.max(...arr.map(([,v])=>v.cap),cap,1);
-      he.innerHTML=arr.map(([name,v])=>'<div class="hist-row"><span class="hist-mes">'+name+'</span><div class="hist-bar"><div class="hist-fill" style="width:'+Math.round(v.cap/maxH*100)+'%;background:var(--ink3)"></div></div><span class="hist-val">'+fmt(v.cap)+'</span><span class="hist-pct">'+fmt(v.fac)+'</span></div>').join('')+
-      '<div class="hist-row"><span class="hist-mes" style="color:var(--ink);font-weight:700">Mes actual</span><div class="hist-bar"><div class="hist-fill" style="width:100%;background:var(--green)"></div></div><span class="hist-val" style="color:var(--green)">'+fmt(cap)+'</span><span class="hist-pct">'+fmt(fac)+'</span></div>';
+
+    // Mes actual (abril = mes 3, index 3)
+    const mesActual=new Date().getMonth(); // 0-based
+    if(!v2026[mesActual])v2026[mesActual]=0;
+    v2026[mesActual]+=fac; // agregar mes actual
+
+    // Actualizar barra 2026 en interanual
+    const total2026=Object.values(v2026).reduce((a,b)=>a+b,0);
+    const b26=document.getElementById('bar-2026');
+    const v26el=document.getElementById('val-2026');
+    const p26el=document.getElementById('pct-2026');
+    if(b26)b26.style.width=Math.round(total2026/406900000*100)+'%';
+    if(v26el)v26el.textContent=fmt(total2026);
+    if(p26el){
+      // Proyectar a año completo basado en meses transcurridos
+      const mesesTransc=mesActual+1;
+      const proyAnual=total2026/mesesTransc*12;
+      const pct=Math.round((proyAnual/406900000-1)*100);
+      p26el.textContent=(pct>=0?'+':'')+pct+'%';
+      p26el.style.color=pct>=0?'var(--green)':'var(--red)';
+    }
+
+    // Construir tabla comparativa
+    const maxBar=Math.max(...Object.values(datos2025).map(v=>v.v2025),1);
+    let rows2026html='';
+    const mesesConDatos=Object.keys(v2026).map(Number).sort((a,b)=>a-b);
+
+    if(mesesConDatos.length>0){
+      rows2026html='<div style="display:grid;grid-template-columns:90px 1fr 100px 100px 70px;gap:8px;align-items:center;padding:4px 0;margin-bottom:6px;border-bottom:1.5px solid var(--ink)"><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--ink3)">Mes</span><span></span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--ink3);text-align:right">2025</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--ink3);text-align:right">2026</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--ink3);text-align:right">Var.</span></div>';
+
+      for(let i=0;i<=mesActual;i++){
+        const nombre=mesNames[i];
+        const v25=datos2025[nombre]?datos2025[nombre].v2025:0;
+        const v26=v2026[i]||0;
+        const varPct=v25>0?Math.round((v26/v25-1)*100):0;
+        const color=varPct>=0?'var(--green)':'var(--red)';
+        const isCurrentMonth=i===mesActual;
+        const barW=Math.round(Math.max(v25,v26)/maxBar*100);
+        rows2026html+='<div style="display:grid;grid-template-columns:90px 1fr 100px 100px 70px;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--b)">'
+          +'<span style="font-family:IBM Plex Mono,monospace;font-size:11px;font-weight:'+(isCurrentMonth?'700':'600')+';color:'+(isCurrentMonth?'var(--ink)':'var(--ink2)')+'">'+nombre+(isCurrentMonth?' ★':'')+' </span>'
+          +'<div style="position:relative;height:14px;background:var(--bg3)">'
+            +'<div style="position:absolute;height:100%;width:'+Math.round(v25/maxBar*100)+'%;background:var(--ink3);opacity:0.4"></div>'
+            +'<div style="position:absolute;height:100%;width:'+Math.round(v26/maxBar*100)+'%;background:'+(isCurrentMonth?'var(--green)':'var(--blue)')+';opacity:0.7"></div>'
+          +'</div>'
+          +'<span style="font-family:IBM Plex Mono,monospace;font-size:11px;text-align:right;color:var(--ink3)">'+fmt(v25)+'</span>'
+          +'<span style="font-family:IBM Plex Mono,monospace;font-size:11px;text-align:right;color:'+(isCurrentMonth?'var(--green)':'var(--ink)')+'">'+fmt(v26)+'</span>'
+          +'<span style="font-family:IBM Plex Mono,monospace;font-size:11px;text-align:right;font-weight:600;color:'+color+'">'+(varPct>=0?'+':'')+varPct+'%</span>'
+          +'</div>';
+      }
+      rows2026html+='<div style="font-size:10px;font-family:IBM Plex Mono,monospace;color:var(--ink3);margin-top:8px">2025 fuente: RelBase &middot; 2026 fuente: sheets de vendedores &middot; Gris=2025, Color=2026</div>';
+      he.innerHTML=rows2026html;
     }else{
-      he.innerHTML='<div style="font-size:12px;color:var(--ink3);padding:12px 0;text-align:center">Actualiza el Apps Script a v4 para ver historial</div>';
+      he.innerHTML='<div style="font-size:12px;color:var(--ink3);padding:12px 0;text-align:center">Actualiza el Apps Script a v4 para ver comparativo mensual</div>';
     }
   }
 }
