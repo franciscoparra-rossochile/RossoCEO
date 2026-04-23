@@ -10,6 +10,21 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Cabinet+Grotesk:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f5f4f0;--bg2:#eeecea;--bg3:#e4e2dd;--ink:#1a1a16;--ink2:#5a5a52;--ink3:#9a9a90;--b:rgba(26,26,22,.1);--b2:rgba(26,26,22,.2);--red:#d4380d;--rbg:#fff1ed;--green:#237804;--gbg:#f0fff0;--yellow:#d4a017;--ybg:#fffbe6;--blue:#0958d9;--bbg:#e6f4ff;--oscar:#7c3aed;--diego:#0369a1;--benj:#b45309;--tatt:#be185d;--pink:#9333ea;}
+
+/* ── LOGIN ── */
+#login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;}
+.login-box{background:white;border:2px solid var(--ink);padding:40px 48px;max-width:380px;width:90%;text-align:center;}
+.login-logo{font-size:28px;font-weight:900;letter-spacing:-1px;margin-bottom:4px;color:var(--red);}
+.login-sub{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:28px;}
+.login-box input[type=password]{width:100%;font-family:"IBM Plex Mono",monospace;font-size:14px;border:1.5px solid var(--b2);padding:10px 14px;outline:none;background:var(--bg2);margin-bottom:14px;}
+.login-box input[type=password]:focus{border-color:var(--ink);}
+.login-btn{width:100%;font-family:"Cabinet Grotesk",sans-serif;font-weight:800;font-size:14px;background:var(--ink);color:white;border:none;padding:12px;cursor:pointer;letter-spacing:.04em;}
+.login-btn:hover{background:var(--red);}
+.login-err{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--red);margin-top:10px;min-height:16px;}
+.badge{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:700;padding:2px 6px;vertical-align:middle;margin-left:4px;}
+.badge.up{background:var(--gbg);color:var(--green);}.badge.dn{background:var(--rbg);color:var(--red);}
+.btn-logout{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink3);border:1px solid var(--b2);padding:3px 8px;background:transparent;cursor:pointer;}
+.btn-logout:hover{color:var(--red);border-color:var(--red);}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-serif;min-height:100vh;}
 .app{max-width:1440px;margin:0 auto;padding:20px 24px 40px;}
@@ -48,8 +63,8 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
 .tbl{width:100%;border-collapse:collapse;}
 .tbl th{font-family:"IBM Plex Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);padding:0 0 8px;border-bottom:1.5px solid var(--ink);text-align:left;}
 .tbl th.r{text-align:right;}
-.tbl td{font-size:12px;padding:7px 0;border-bottom:1px solid var(--b);color:var(--ink);}
-.tbl td.r{text-align:right;font-family:"IBM Plex Mono",monospace;font-weight:600;}
+.tbl td{font-size:12px;padding:7px 0;border-bottom:1px solid var(--b);color:var(--ink);font-weight:700;}
+.tbl td.r{text-align:right;font-family:"IBM Plex Mono",monospace;font-weight:700;}
 .tbl tr:last-child td{border-bottom:none;font-weight:700;}
 .pipe-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
 .pipe-l{font-size:11px;font-weight:700;width:140px;flex-shrink:0;}
@@ -88,7 +103,18 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
 </style>
 </head>
 <body>
-<div class="app">
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">ROSSO</div>
+    <div class="login-sub">Control Comercial · Acceso Restringido</div>
+    <input type="password" id="pwd-input" placeholder="Ingresa la clave" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Ingresar</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<div class="app" id="main-app" style="display:none">
 
 <div class="hdr">
   <div class="logo">
@@ -98,7 +124,7 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
   <div class="hdr-right">
     <div class="live"><div class="ldot"></div><span id="live-status">Cargando...</span></div>
     <div class="hdr-dt" id="dt"></div>
-    <button class="btn-rf" onclick="refreshAll()">&#8635; Actualizar</button>
+    <div style="display:flex;gap:8px;align-items:center"><button class="btn-rf" onclick="refreshAll()">&#8635; Actualizar</button><button class="btn-logout" onclick="doLogout()">Cerrar sesión</button></div>
   </div>
 </div>
 
@@ -121,15 +147,16 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
 
   <div class="sec">Mes actual &mdash; Sucursal Talca</div>
   <div class="g4">
-    <div class="kpi gr"><div class="kl">Total capturado</div><div class="kv gr" id="r-cap">$&mdash;</div><div class="ks">Todos los vendedores</div><div class="pb"><div class="pbl"><span id="r-pct">&mdash;%</span><span>meta</span></div><div class="pbt"><div class="pbf" id="r-bar" style="background:var(--green);width:0%"></div></div></div></div>
-    <div class="kpi bl"><div class="kl">Total facturado</div><div class="kv bl" id="r-fac">$&mdash;</div><div class="ks">Boleta + factura emitida</div></div>
-    <div class="kpi ye"><div class="kl">Por facturar</div><div class="kv ye" id="r-xfac">$&mdash;</div><div class="ks">Efectivo circulante</div></div>
+    <div class="kpi gr"><div class="kl">Meta sucursal</div><div class="kv gr" id="r-meta">$&mdash;</div><div class="ks">Oscar + Diego + Benjamín</div></div>
+    <div class="kpi bl"><div class="kl">Total capturado</div><div class="kv bl" id="r-cap">$&mdash;</div><div class="ks">Todos los vendedores</div><div class="pb"><div class="pbl"><span id="r-pct">&mdash;%</span><span>meta</span></div><div class="pbt"><div class="pbf" id="r-bar" style="background:var(--blue);width:0%"></div></div></div></div>
+    <div class="kpi ye"><div class="kl">Total facturado</div><div class="kv ye" id="r-fac">$&mdash;</div><div class="ks">Boleta + factura emitida</div></div>
     <div class="kpi re"><div class="kl">Proyeccion cierre mes</div><div class="kv re" id="r-proy">$&mdash;</div><div class="ks">A ritmo actual</div></div>
   </div>
-  <div class="g3" style="margin-top:-8px;margin-bottom:20px">
-    <div class="kpi re"><div class="kl">Brecha sucursal para meta</div><div class="kv re" id="r-brecha">$&mdash;</div><div class="ks">Falta para cumplir meta</div></div>
+  <div class="g4" style="margin-top:-8px;margin-bottom:20px">
+    <div class="kpi re"><div class="kl">Brecha para meta</div><div class="kv re" id="r-brecha">$&mdash;</div><div class="ks" id="r-brecha-pct">Falta para cumplir meta</div></div>
     <div class="kpi ye"><div class="kl">Plan diario requerido</div><div class="kv ye" id="r-plan-diario">$&mdash;</div><div class="ks">Para cubrir brecha en días restantes</div></div>
     <div class="kpi gr"><div class="kl">Ritmo actual / día</div><div class="kv gr" id="r-ritmo">$&mdash;</div><div class="ks">Promedio real del mes</div></div>
+    <div class="kpi bl"><div class="kl">% Cumplimiento</div><div class="kv bl" id="r-pct2">&mdash;</div><div class="ks">Avance vs meta sucursal</div></div>
   </div>
 
   <div class="sec">Pipeline sucursal</div>
@@ -159,10 +186,19 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
   <div class="sec">Brecha y plan diario por vendedor</div>
   <div class="card nb" style="margin-bottom:20px;overflow-x:auto">
     <table class="tbl" style="min-width:500px">
-      <thead><tr><th>Vendedor</th><th class="r">Meta</th><th class="r">Capturado</th><th class="r">Brecha</th><th class="r">Plan diario</th><th class="r">Avance</th></tr></thead>
-      <tbody id="tbl-brechas"><tr><td colspan="6" class="loading">Cargando...</td></tr></tbody>
+      <thead><tr><th>Vendedor</th><th class="r">Meta</th><th class="r">Capturado</th><th class="r">Brecha $</th><th class="r">Brecha %</th><th class="r">Plan diario</th><th class="r">Avance</th></tr></thead>
+      <tbody id="tbl-brechas"><tr><td colspan="7" class="loading">Cargando...</td></tr></tbody>
     </table>
   </div>
+
+  <div class="sec">Ventas por día &mdash; Sucursal completa (mes en curso)</div>
+  <div class="card" id="hist-diario-sucursal" style="margin-bottom:20px"><div class="loading"><span class="sp"></span>Cargando...</div></div>
+
+  <div class="sec">Ventas por día &mdash; Por área (mes en curso)</div>
+  <div class="card" id="hist-diario-areas" style="overflow-x:auto;margin-bottom:20px"><div class="loading"><span class="sp"></span>Cargando...</div></div>
+
+  <div class="sec">Ventas por semana &mdash; Sucursal (días hábiles L-V)</div>
+  <div class="card" id="semanas-sucursal" style="margin-bottom:20px"><div class="loading"><span class="sp"></span>Cargando...</div></div>
 
   <div class="sec">Comparativo interanual &mdash; ventas netas (RelBase)</div>
   <div class="card" style="margin-bottom:20px">
@@ -248,6 +284,24 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
 </div><!-- .app -->
 
 <script>
+// ── AUTH ──
+const APP_PWD='Fefra2629';
+function doLogin(){
+  const v=document.getElementById('pwd-input').value;
+  if(v===APP_PWD){
+    sessionStorage.setItem('rosso_auth','1');
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('main-app').style.display='block';
+    refreshAll();
+  }else{
+    document.getElementById('login-err').textContent='Clave incorrecta. Intenta nuevamente.';
+    document.getElementById('pwd-input').value='';
+    document.getElementById('pwd-input').focus();
+  }
+}
+function doLogout(){sessionStorage.removeItem('rosso_auth');location.reload();}
+// Note: auth check moved to window.onload replacement below
+
 const URLS={
   oscar:'https://script.google.com/macros/s/AKfycbzsXL-ThBL0dBGCKBE0th1k2dYtc8TgxznuQUt2Mca883TVbwERCXaE5Q-5FjBHoIK2rQ/exec',
   diego:'https://script.google.com/macros/s/AKfycby5CdLaEC3DPjz6xTrSWOQ7QGdyGOb1rs2zZOawfw-MZHFW95QjOplsJWsumFQMZcRJ/exec',
@@ -316,93 +370,108 @@ function getKPI(rows,...labels){
   return '';
 }
 
-// Detect if a cell value corresponds to today
-function isToday(cellVal){
-  if(!cellVal)return false;
-  const cell=cellVal.toString().trim();
-  if(!cell||cell==='FECHA')return false;
-  const now=new Date();
-  const d=now.getDate();
-  const m=now.getMonth()+1;
-  const yyyy=String(now.getFullYear());
-  const dd=String(d).padStart(2,'0');
-  const mm=String(m).padStart(2,'0');
-  // DD-MM-YYYY or DD/MM/YYYY (con ceros)
-  if(cell===dd+'-'+mm+'-'+yyyy||cell===dd+'/'+mm+'-'+yyyy)return true;
-  if(cell===dd+'/'+mm+'/'+yyyy||cell===dd+'-'+mm+'/'+yyyy)return true;
-  // D/M/YYYY o D-M-YYYY (sin ceros — formato de Diego)
-  if(cell===d+'/'+m+'/'+yyyy||cell===d+'-'+m+'-'+yyyy)return true;
-  if(cell===d+'/'+m+'-'+yyyy||cell===d+'-'+m+'/'+yyyy)return true;
-  // ISO: YYYY-MM-DD
-  if(cell.startsWith(yyyy+'-'+mm+'-'+dd))return true;
-  // JS Date string: "Wed Apr 22 2026 00:00:00 GMT..."
-  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const mon=months[now.getMonth()];
-  if(cell.includes(mon)&&cell.includes(' '+d+' ')&&cell.includes(yyyy))return true;
-  return false;
+// ── DATE UTILS ──
+function parseDate(cellVal){
+  if(!cellVal)return null;
+  const cs=cellVal.toString().trim();
+  if(!cs||cs==='FECHA')return null;
+  const parts=cs.split(/[-\/]/);
+  if(parts.length===3){
+    let d2,m2,y2;
+    const p0=parseInt(parts[0]),p1=parseInt(parts[1]),p2=parseInt(parts[2]);
+    if(p2>1000){d2=p0;m2=p1;y2=p2;}else{y2=p0;m2=p1;d2=p2;}
+    if(!isNaN(d2)&&!isNaN(m2)&&!isNaN(y2)){const dt=new Date(y2,m2-1,d2);if(!isNaN(dt.getTime()))return dt;}
+  }
+  const dt=new Date(cs);
+  if(!isNaN(dt.getTime()))return dt;
+  return null;
 }
-
-// Calculate today indicators from raw rows
-function calcToday(rows){
-  // Buscar header del detalle de cotizaciones (col 0 = FECHA)
-  let headerIdx=-1;
+function isWeekday(date){const dow=date.getDay();return dow>=1&&dow<=5;}
+function isToday(cellVal){
+  const dt=parseDate(cellVal);
+  if(!dt)return false;
+  const now=new Date();
+  return dt.getFullYear()===now.getFullYear()&&dt.getMonth()===now.getMonth()&&dt.getDate()===now.getDate();
+}
+function getBizWeek(date){
+  const y=date.getFullYear(),mo=date.getMonth(),day=date.getDate();
+  let bizDays=0;
+  for(let d2=1;d2<=day;d2++){if(isWeekday(new Date(y,mo,d2)))bizDays++;}
+  return Math.ceil(bizDays/5)||1;
+}
+function weekLabel(date){
+  const y=date.getFullYear(),mo=date.getMonth(),meses=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const wk=getBizWeek(date);
+  let first=null,last=null,bizCount=0;
+  const daysInMonth=new Date(y,mo+1,0).getDate();
+  for(let d2=1;d2<=daysInMonth;d2++){const dd=new Date(y,mo,d2);if(isWeekday(dd)){bizCount++;const wn=Math.ceil(bizCount/5);if(wn===wk){if(!first)first=d2;last=d2;}}}
+  return`S${wk} · ${String(first||1).padStart(2,'0')}-${String(last||7).padStart(2,'0')} ${meses[mo]}`;
+}
+function findDetailHeader(rows){
   for(let i=0;i<rows.length;i++){
     const c0=(rows[i][0]||'').toString().trim().toUpperCase();
-    const c6=(rows[i][6]||'').toString().trim().toUpperCase();
-    const c8=(rows[i][8]||'').toString().trim().toUpperCase();
-    if(c0==='FECHA'&&(c6.includes('PROCESO')||c8.includes('VALOR'))){headerIdx=i;break;}
+    const anyProc=rows[i].some(c=>(c||'').toString().toUpperCase().includes('PROCESO'));
+    const anyValor=rows[i].some(c=>(c||'').toString().toUpperCase().includes('VALOR'));
+    if(c0==='FECHA'&&(anyProc||anyValor))return i;
   }
+  return -1;
+}
 
+// Calculate today indicators
+function calcToday(rows){
+  const headerIdx=findDetailHeader(rows);
   let cotN=0,cotV=0,capN=0,capV=0,facN=0,facV=0;
-
   if(headerIdx>=0){
     const hdrs=rows[headerIdx].map(h=>(h||'').toString().trim().toUpperCase());
     const iP=hdrs.findIndex(h=>h.includes('PROCESO'));
-    const iE=hdrs.findIndex(h=>h.includes('ESTADO')&&h.includes('PAGO'));
-    const iV=hdrs.findIndex(h=>h.includes('VALOR')&&h.includes('COT'));
-    const iPf=iP>=0?iP:6;
-    const iEf=iE>=0?iE:7;
-    const iVf=iV>=0?iV:8;
-
+    const iE=hdrs.findIndex(h=>h.includes('ESTADO'));
+    const iV=hdrs.findIndex(h=>h.includes('VALOR'));
+    const iFD=hdrs.findIndex(h=>h.includes('FECHA')&&h.includes('FACTUR'));
+    const iPf=iP>=0?iP:6;const iEf=iE>=0?iE:7;const iVf=iV>=0?iV:8;
     for(let i=headerIdx+1;i<rows.length;i++){
       const row=rows[i];
-      if(!isToday(row[0]))continue;
       const proceso=(row[iPf]||'').toString().trim().toUpperCase();
       const estado=(row[iEf]||'').toString().trim().toUpperCase();
       const valor=clp(row[iVf]||0);
-
-      // Cotizaciones enviadas = toda fila de hoy con valor > 0
-      if(valor>0){cotN++;cotV+=valor;}
-
-      // Venta capturada = VENDIDA o CAPTURADO (individual, del detalle)
-      if((proceso==='VENDIDA'||estado==='CAPTURADO')&&valor>0){
-        capN++;capV+=valor;
-      }
-
-      // Venta facturada = FACTURADO en estado de pago
-      if(estado==='FACTURADO'&&valor>0){facN++;facV+=valor;}
+      if(valor<=0)continue;
+      if(isToday(row[0])){cotN++;cotV+=valor;}
+      if(isToday(row[0])&&(proceso==='VENDIDA'||estado==='CAPTURADO'||proceso==='CAPTURADO')){capN++;capV+=valor;}
+      const facDate=iFD>=0?row[iFD]:null;
+      const useFacDate=facDate&&parseDate(facDate)?facDate:row[0];
+      if(isToday(useFacDate)&&(estado==='FACTURADO'||proceso==='FACTURADO')){facN++;facV+=valor;}
     }
   }
-
-  // Fallback capturado desde G:H si el detalle no encontró nada
-  if(capV===0){
-    let colFecha=6,colVenta=7;
-    for(let i=0;i<Math.min(5,rows.length);i++){
-      const c7=(rows[i][7]||'').toString().trim().toUpperCase();
-      const c8=(rows[i][8]||'').toString().trim().toUpperCase();
-      if(c7==='FECHA'||(c8.includes('VENTA')&&c8.includes('DIA'))){
-        colFecha=7;colVenta=8;break;
-      }
-    }
-    for(let i=0;i<Math.min(30,rows.length);i++){
-      if(isToday(rows[i][colFecha])){
-        const v=clp(rows[i][colVenta]||0);
-        if(v>0){capV+=v;capN=1;}
-      }
-    }
-  }
-
   return{cotN,cotV,capN,capV,facN,facV};
+}
+
+// Calculate daily history for current month
+function calcHistorialDiario(rows){
+  const headerIdx=findDetailHeader(rows);
+  if(headerIdx<0)return[];
+  const hdrs=rows[headerIdx].map(h=>(h||'').toString().trim().toUpperCase());
+  const iP=hdrs.findIndex(h=>h.includes('PROCESO'));
+  const iE=hdrs.findIndex(h=>h.includes('ESTADO'));
+  const iV=hdrs.findIndex(h=>h.includes('VALOR'));
+  const iFD=hdrs.findIndex(h=>h.includes('FECHA')&&h.includes('FACTUR'));
+  const iPf=iP>=0?iP:6;const iEf=iE>=0?iE:7;const iVf=iV>=0?iV:8;
+  const now=new Date();const curY=now.getFullYear(),curM=now.getMonth();
+  const dayMap={};
+  for(let i=headerIdx+1;i<rows.length;i++){
+    const row=rows[i];const dt=parseDate(row[0]);
+    if(!dt||dt.getFullYear()!==curY||dt.getMonth()!==curM)continue;
+    const proceso=(row[iPf]||'').toString().trim().toUpperCase();
+    const estado=(row[iEf]||'').toString().trim().toUpperCase();
+    const valor=clp(row[iVf]||0);if(valor<=0)continue;
+    const dayKey=dt.getDate();
+    if(!dayMap[dayKey])dayMap[dayKey]={day:dayKey,cap:0,fac:0,n:0};
+    if(proceso==='VENDIDA'||estado==='CAPTURADO'||proceso==='CAPTURADO'){dayMap[dayKey].cap+=valor;dayMap[dayKey].n++;}
+    const facDate=iFD>=0?row[iFD]:null;
+    const facDt=facDate?parseDate(facDate):null;
+    const facDay=facDt&&facDt.getFullYear()===curY&&facDt.getMonth()===curM?facDt.getDate():
+      ((estado==='FACTURADO'||proceso==='FACTURADO')?dayKey:null);
+    if(facDay!==null){if(!dayMap[facDay])dayMap[facDay]={day:facDay,cap:0,fac:0,n:0};dayMap[facDay].fac+=valor;}
+  }
+  return Object.values(dayMap).sort((a,b)=>a.day-b.day);
 }
 
 // FETCH via JSONP
@@ -435,7 +504,7 @@ const CLASIFICACIONES_DIEGO = [
 ];
 const CLASIFICACIONES_BENJAMIN = [
   'Neumaticos','Cubre Pick up','Suspensiones','Thule','Calce perfecto',
-  'Posaderas','Bumpers','Organizadores','Enganches','Antivuelcos',
+  'Pisaderas','Bumpers','Organizadores','Enganches','Antivuelcos',
   'Accesorios','Reprogramaciones','Personas','Licitaciones'
 ];
 
@@ -470,7 +539,8 @@ function parseVendor(data){
   const SKIP_STATUS=['META','META MENSUAL','META DIARIA','META SEMANAL','META DE FACTURACION','TATTERSALL','NEUMATICOS AGRICOLAS',
     'VENDIDA','COTIZACION ENVIADA','EN ESPERA','NO VENDIDA','COTIZANDO','HACER SEGUIMIENTO','CAPTURACION DE VENTA',
     'FACTURADO','PROYECCION','PROYECCION REAL','TASA DE CIERRE','TICKET PROMEDIO DIARIO','DIAS TRANSCURRIDOS',
-    'DIAS COMPLETADOS','DIAS RESTANTES','TOTAL COTIZACIONES ENVIADAS','TOTAL COTIZADO'];
+    'DIAS COMPLETADOS','DIAS RESTANTES','TOTAL COTIZACIONES ENVIADAS','TOTAL COTIZADO',
+    'CAPTURADO','PROCESOS DE VENTA','ESTADOS DE PAGO','PROCESO DE VENTA','ESTADO DE PAGO'];
   let clasificaciones=[];
   let clsIdx=-1;
   for(let i=0;i<rows.length;i++){
@@ -481,8 +551,8 @@ function parseVendor(data){
       const r=rows[i];
       const lbl=(r[3]||r[0]||'').toString().trim();
       const val=r[4]||r[1]||'';
-      if(lbl&&!SKIP_STATUS.includes(lbl.toUpperCase()))
-        clasificaciones.push([lbl,clp(val)]);
+      if(lbl&&!SKIP_STATUS.includes(lbl.toUpperCase())){
+        clasificaciones.push([lbl,clp(val)]);}
     }
   }
 
@@ -493,56 +563,95 @@ function parseVendor(data){
   }).filter(h=>h.cap>0||h.fac>0);
 
   const today=calcToday(rows);
-
-  // Semanas del mes: agrupar detalle por semana
   const semanas=calcSemanas(rows);
+  const histDiario=calcHistorialDiario(rows);
 
-  return{cap,meta,proy,fac,cot,tasa,ticket,diast,diasr,vendida,enviada,espera,seguimiento,cotizando,novendida,xfac,clasificaciones,historial,today,semanas,rawRows:rows};
+  return{cap,meta,proy,fac,cot,tasa,ticket,diast,diasr,vendida,enviada,espera,seguimiento,cotizando,novendida,xfac,clasificaciones,historial,today,semanas,histDiario,rawRows:rows};
 }
 
-// Calculate weekly sales from row detail
+// Calculate weekly sales (business days Mon-Fri)
 function calcSemanas(rows){
-  let headerIdx=-1;
-  for(let i=0;i<rows.length;i++){
-    const c0=(rows[i][0]||'').toString().trim().toUpperCase();
-    const c6=(rows[i][6]||'').toString().trim().toUpperCase();
-    const c8=(rows[i][8]||'').toString().trim().toUpperCase();
-    if(c0==='FECHA'&&(c6.includes('PROCESO')||c8.includes('VALOR'))){headerIdx=i;break;}
-  }
+  const headerIdx=findDetailHeader(rows);
   if(headerIdx<0)return[];
   const hdrs=rows[headerIdx].map(h=>(h||'').toString().trim().toUpperCase());
   const iP=hdrs.findIndex(h=>h.includes('PROCESO'));
-  const iV=hdrs.findIndex(h=>h.includes('VALOR')&&h.includes('COT'));
-  const iPf=iP>=0?iP:6;
-  const iVf=iV>=0?iV:8;
+  const iE=hdrs.findIndex(h=>h.includes('ESTADO'));
+  const iV=hdrs.findIndex(h=>h.includes('VALOR'));
+  const iFD=hdrs.findIndex(h=>h.includes('FECHA')&&h.includes('FACTUR'));
+  const iPf=iP>=0?iP:6;const iEf=iE>=0?iE:7;const iVf=iV>=0?iV:8;
+  const now=new Date();const curY=now.getFullYear(),curM=now.getMonth();
   const semMap={};
   for(let i=headerIdx+1;i<rows.length;i++){
     const row=rows[i];
-    const cellDate=row[0];
-    if(!cellDate)continue;
-    let fecha;
-    const cs=cellDate.toString().trim();
-    if(!cs||cs==='FECHA')continue;
-    // try parse
-    const parts=cs.split(/[-\/]/);
-    if(parts.length===3){
-      const d=parseInt(parts[0]),m=parseInt(parts[1]),y=parseInt(parts[2]);
-      if(!isNaN(d)&&!isNaN(m)&&!isNaN(y))fecha=new Date(y,m-1,d);
-    }
-    if(!fecha||isNaN(fecha.getTime()))continue;
+    const dt=parseDate(row[0]);
+    if(!dt||dt.getFullYear()!==curY||dt.getMonth()!==curM||!isWeekday(dt))continue;
     const proceso=(row[iPf]||'').toString().trim().toUpperCase();
-    const valor=clp(row[iVf]||0);
-    if(valor<=0)continue;
-    // Only count captured sales
-    if(proceso!=='VENDIDA'&&proceso!=='CAPTURADO')continue;
-    // Get week number of month (1-5)
-    const weekNum=Math.ceil(fecha.getDate()/7);
-    const key='S'+weekNum;
-    if(!semMap[key])semMap[key]={sem:key,n:0,v:0};
-    semMap[key].n++;
-    semMap[key].v+=valor;
+    const estado=(row[iEf]||'').toString().trim().toUpperCase();
+    const valor=clp(row[iVf]||0);if(valor<=0)continue;
+    const wk=getBizWeek(dt);
+    if(!semMap[wk])semMap[wk]={wk,label:weekLabel(dt),capV:0,capN:0,facV:0,facN:0};
+    if(proceso==='VENDIDA'||estado==='CAPTURADO'||proceso==='CAPTURADO'){semMap[wk].capV+=valor;semMap[wk].capN++;}
+    const facDate=iFD>=0?row[iFD]:null;
+    const facDt=facDate?parseDate(facDate):null;
+    const useFacDt=facDt&&isWeekday(facDt)&&facDt.getFullYear()===curY&&facDt.getMonth()===curM?facDt:null;
+    if(useFacDt||(estado==='FACTURADO'||proceso==='FACTURADO')){
+      const facWk=useFacDt?getBizWeek(useFacDt):wk;
+      if(!semMap[facWk])semMap[facWk]={wk:facWk,label:useFacDt?weekLabel(useFacDt):semMap[wk].label,capV:0,capN:0,facV:0,facN:0};
+      semMap[facWk].facV+=valor;semMap[facWk].facN++;
+    }
   }
-  return Object.values(semMap).sort((a,b)=>a.sem.localeCompare(b.sem));
+  return Object.values(semMap).sort((a,b)=>a.wk-b.wk);
+}
+
+// Helper: render weekly bars
+function renderSemanas(semanas,color){
+  if(!semanas||!semanas.length)return'<div style="font-size:12px;color:var(--ink3);padding:8px 0;text-align:center">Sin detalle semanal (verifica que el Apps Script exponga el detalle de cotizaciones)</div>';
+  const maxV=Math.max(...semanas.map(s=>s.capV),1);
+  return semanas.map(s=>`<div style="margin-bottom:10px">
+    <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink3);margin-bottom:3px"><span><strong>${s.label}</strong> &middot; ${s.capN} ventas cap.</span><span style="color:var(--blue)">${s.facN} facturadas</span></div>
+    <div class="pipe-row" style="margin-bottom:4px"><span class="pipe-l" style="font-size:10px;color:var(--ink3);width:70px">Capturado</span><div class="pipe-t"><div class="pipe-f" style="width:${Math.round(s.capV/maxV*100)}%;background:${color}"></div></div><span class="pipe-v">${fmt(s.capV)}</span></div>
+    <div class="pipe-row"><span class="pipe-l" style="font-size:10px;color:var(--ink3);width:70px">Facturado</span><div class="pipe-t"><div class="pipe-f" style="width:${Math.round(s.facV/Math.max(maxV,1)*100)}%;background:var(--blue);opacity:0.6"></div></div><span class="pipe-v" style="color:var(--blue)">${fmt(s.facV)}</span></div>
+  </div>`).join('');
+}
+
+// Helper: render daily history
+function renderHistDiario(histDiario,color,vendorLabel){
+  if(!histDiario||!histDiario.length)return'<div style="font-size:12px;color:var(--ink3);padding:8px 0;text-align:center">Sin historial diario</div>';
+  const now=new Date();const meses=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const mes=meses[now.getMonth()]+' '+now.getFullYear();
+  const maxV=Math.max(...histDiario.map(d=>Math.max(d.cap||0,d.fac||0)),1);
+  return`<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink3);margin-bottom:8px;display:flex;justify-content:space-between"><span>${vendorLabel} &middot; ${mes}</span><span>■ Cap. &nbsp; ■ Fact.</span></div>`+
+  histDiario.map(d2=>{
+    const dt=new Date(now.getFullYear(),now.getMonth(),d2.day);
+    const dow=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'][dt.getDay()];
+    const isHoy=d2.day===now.getDate();
+    return`<div style="display:grid;grid-template-columns:60px 1fr 90px 90px;gap:8px;align-items:center;padding:3px 0;border-bottom:1px solid var(--b)">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:${isHoy?'700':'500'};color:${isHoy?'var(--ink)':'var(--ink2)'}">${dow} ${String(d2.day).padStart(2,'0')}</span>
+      <div style="position:relative;height:11px;background:var(--bg3)">
+        <div style="position:absolute;height:100%;width:${Math.round((d2.cap||0)/maxV*100)}%;background:${color};opacity:0.75"></div>
+        <div style="position:absolute;height:100%;width:${Math.round((d2.fac||0)/maxV*100)}%;background:var(--blue);opacity:0.35"></div>
+      </div>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;text-align:right;color:${isHoy?color:'var(--ink2)'}">${(d2.cap||0)>0?fmt(d2.cap):'—'}</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;text-align:right;color:var(--blue)">${(d2.fac||0)>0?fmt(d2.fac):'—'}</span>
+    </div>`;
+  }).join('');
+}
+
+// Helper: historial with growth
+function renderHistorial(historial,capActual,facActual){
+  if(!historial||!historial.length)return'<div style="font-size:12px;color:var(--ink3);padding:12px 0;text-align:center">Actualiza el Apps Script a v4 para ver historial</div>';
+  const all=[...historial,{name:'Mes actual',cap:capActual,fac:facActual,isCurrent:true}];
+  return'<table class="tbl"><thead><tr><th>Mes</th><th class="r">Capturado</th><th class="r">Facturado</th><th class="r">Crecim.</th></tr></thead><tbody>'+
+    all.map((h,i)=>{
+      const prev=i>0?all[i-1]:null;
+      let crec='—';
+      if(prev&&prev.cap>0){const pct=Math.round((h.cap/prev.cap-1)*100);crec=`<span class="badge ${pct>=0?'up':'dn'}">${pct>=0?'+':''}${pct}%</span>`;}
+      const isC=h.isCurrent;
+      return`<tr><td>${isC?`<strong>${h.name}</strong>`:h.name}</td>`+
+        `<td class="r">${isC?`<strong style="color:var(--green)">${fmt(h.cap)}</strong>`:fmt(h.cap)}</td>`+
+        `<td class="r">${isC?`<strong>${fmt(h.fac)}</strong>`:fmt(h.fac)}</td>`+
+        `<td class="r">${crec}</td></tr>`;
+    }).join('')+'</tbody></table>';
 }
 
 // Render vendor tab
@@ -580,29 +689,29 @@ function renderVendorTab(tabId,prefix,d){
       '</tbody></table>';
   };
 
-  const hist=()=>{
-    if(!d.historial||!d.historial.length)return '<div style="font-size:12px;color:var(--ink3);padding:12px 0;text-align:center">Actualiza el Apps Script a v4 para ver historial</div>';
-    const maxH=Math.max(...d.historial.map(h=>h.cap),d.cap,1);
-    return '<table class="tbl"><thead><tr><th>Mes</th><th class="r">Capturado</th><th class="r">Facturado</th></tr></thead><tbody>'+
-      d.historial.map(h=>'<tr><td>'+h.name+'</td><td class="r">'+fmt(h.cap)+'</td><td class="r">'+fmt(h.fac)+'</td></tr>').join('')+
-      '<tr><td><strong>Mes actual</strong></td><td class="r" style="color:var(--green)"><strong>'+fmt(d.cap)+'</strong></td><td class="r"><strong>'+fmt(d.fac)+'</strong></td></tr>'
-      +'</tbody></table>';
-  };
 
-  const semanas=()=>{
-    if(!d.semanas||!d.semanas.length)return '<div style="font-size:12px;color:var(--ink3);padding:8px 0">Sin detalle semanal</div>';
-    const maxS=Math.max(...d.semanas.map(s=>s.v),1);
-    return d.semanas.map(s=>'<div class="pipe-row"><span class="pipe-l">'+s.sem+' ('+s.n+' ventas)</span><div class="pipe-t"><div class="pipe-f" style="width:'+Math.round(s.v/maxS*100)+'%;background:var(--blue)"></div></div><span class="pipe-v">'+fmt(s.v)+'</span></div>').join('');
-  };
+
+  const clsSorted=d.clasificaciones?[...d.clasificaciones].sort((a,b2)=>b2[1]-a[1]):[];
+  const clsTop=clsSorted.slice(0,5);
+  const clsBot=[...clsSorted].reverse().slice(0,5).filter(c=>c[1]>0);
 
   const accentColor=prefix==='os'?'var(--oscar)':prefix==='di'?'var(--diego)':'var(--benj)';
+
+  const clsTotalV=d.clasificaciones?d.clasificaciones.reduce((s,c)=>s+c[1],0):0;
+  const claifHTML=()=>{
+    if(!d.clasificaciones||!d.clasificaciones.length)return'<div style="font-size:12px;color:var(--ink3);padding:12px 0;text-align:center">Sin datos</div>';
+    return'<table class="tbl"><thead><tr><th>Clasificación</th><th class="r">Monto</th><th class="r">%</th></tr></thead><tbody>'+
+      [...d.clasificaciones].sort((a,b2)=>b2[1]-a[1]).map(([l,v])=>`<tr><td>${l}</td><td class="r">${fmt(v)}</td><td class="r" style="color:var(--ink3)">${clsTotalV>0?((v/clsTotalV)*100).toFixed(1)+'%':'—'}</td></tr>`).join('')+
+      '</tbody></table>';
+  };
+  const brechaPct=meta>0?Math.round(brecha/meta*100):0;
 
   el.innerHTML=`
   <div class="sec">Hoy &mdash; ${todayLabel}</div>
   <div class="g3" style="margin-bottom:20px">
-    <div class="kpi ${prefix}"><div class="kl">Cotizaciones enviadas hoy</div><div class="kv ${prefix}">${fmt(d.today.cotV)}</div><div class="ks">${d.today.cotN} cotizaci${d.today.cotN===1?'ón':'ones'}</div></div>
-    <div class="kpi gr"><div class="kl">Venta capturada hoy</div><div class="kv gr">${fmt(d.today.capV)}</div><div class="ks">${d.today.capN} venta${d.today.capN===1?'':'s'} cerrada${d.today.capN===1?'':'s'}</div></div>
-    <div class="kpi bl"><div class="kl">Venta facturada hoy</div><div class="kv bl">${fmt(d.today.facV)}</div><div class="ks">${d.today.facN} factura${d.today.facN===1?'':'s'}</div></div>
+    <div class="kpi ${prefix}"><div class="kl">Cotizaciones enviadas hoy</div><div class="kv ${prefix}">${fmt(d.today.cotV)}</div><div class="ks">${d.today.cotN} cotizaciones</div></div>
+    <div class="kpi gr"><div class="kl">Venta capturada hoy</div><div class="kv gr">${fmt(d.today.capV)}</div><div class="ks">${d.today.capN} ventas cerradas</div></div>
+    <div class="kpi bl"><div class="kl">Venta facturada hoy</div><div class="kv bl">${fmt(d.today.facV)}</div><div class="ks">${d.today.facN} facturas</div></div>
   </div>
 
   <div class="sec">Mes actual &mdash; Plan vs Rendimiento</div>
@@ -613,26 +722,35 @@ function renderVendorTab(tabId,prefix,d){
     <div class="kpi gr"><div class="kl">Total cotizado</div><div class="kv gr">${fmt(d.cot)}</div><div class="ks">Cotizaciones enviadas</div></div>
   </div>
   <div class="g4" style="margin-top:-8px">
-    <div class="kpi re"><div class="kl">Brecha para la meta</div><div class="kv re">${brecha>0?fmt(brecha):'✓ Meta alcanzada'}</div><div class="ks">Falta para completar ${fmt(meta)}</div></div>
-    <div class="kpi ye"><div class="kl">Plan diario requerido</div><div class="kv ye">${planDiario>0?fmt(planDiario):'—'}</div><div class="ks">Para cubrir brecha en ${diasR} días restantes</div></div>
-    <div class="kpi gr"><div class="kl">Ritmo actual / día</div><div class="kv gr">${fmt(ritmoActual)}</div><div class="ks">Promedio real (${diasT} días transcurridos)</div></div>
+    <div class="kpi re"><div class="kl">Brecha para meta</div><div class="kv re">${brecha>0?fmt(brecha):'✓ Meta'}</div><div class="ks">${brecha>0?brechaPct+'% de meta pendiente':'Meta alcanzada'}</div></div>
+    <div class="kpi ye"><div class="kl">Plan diario requerido</div><div class="kv ye">${planDiario>0?fmt(planDiario):'—'}</div><div class="ks">${diasR} días restantes</div></div>
+    <div class="kpi gr"><div class="kl">Ritmo actual / día</div><div class="kv gr">${fmt(ritmoActual)}</div><div class="ks">${diasT} días transcurridos</div></div>
     <div class="kpi bl"><div class="kl">Proyeccion mes</div><div class="kv bl">${fmt(d.proy)}</div><div class="ks">A ritmo actual</div></div>
   </div>
   <div class="g4" style="margin-top:-8px">
     <div class="kpi gr"><div class="kl">Tasa de cierre</div><div class="kv gr">${d.tasa||'—'}</div></div>
     <div class="kpi ye"><div class="kl">Ticket promedio / día</div><div class="kv ye">${fmt(d.ticket)}</div></div>
     <div class="kpi re"><div class="kl">Días restantes</div><div class="kv re">${d.diasr}</div><div class="ks">Transcurridos: ${d.diast}</div></div>
-    <div class="kpi ${prefix}"><div class="kl">% de avance meta</div><div class="kv ${prefix}">${pct}%</div></div>
+    <div class="kpi ${prefix}"><div class="kl">% Avance meta</div><div class="kv ${prefix}">${pct}%</div></div>
   </div>
 
-  <div class="sec">Ventas por semana (mes actual)</div>
-  <div class="card" style="margin-bottom:12px">${semanas()}</div>
+  <div class="sec">Ventas por semana &mdash; días hábiles L-V</div>
+  <div class="card" style="margin-bottom:12px">${renderSemanas(d.semanas,accentColor)}</div>
+
+  <div class="sec">Historial de venta por día (mes en curso)</div>
+  <div class="card" style="margin-bottom:12px">${renderHistDiario(d.histDiario,accentColor,'')}</div>
 
   <div class="g2">
     <div><div class="sec">Pipeline</div><div class="card nb">${pipe()}</div></div>
-    <div><div class="sec">Cotizaciones por tipo de servicio</div><div class="card nb">${claif()}</div></div>
+    <div><div class="sec">Cotizaciones por tipo de servicio</div><div class="card nb">${claifHTML()}</div></div>
   </div>
-  <div style="margin-top:12px"><div class="sec">Historial mensual</div><div class="card">${hist()}</div></div>
+
+  <div class="g2" style="margin-top:12px">
+    <div><div class="sec">Más vendidos (top 5)</div><div class="card nb">${clsTop.length?'<table class="tbl"><thead><tr><th>Clasificación</th><th class="r">Monto</th></tr></thead><tbody>'+clsTop.map(([l,v])=>`<tr><td>${l}</td><td class="r">${fmt(v)}</td></tr>`).join('')+'</tbody></table>':'<div style="font-size:12px;color:var(--ink3);padding:8px">Sin datos</div>'}</div></div>
+    <div><div class="sec">Menos vendidos</div><div class="card nb">${clsBot.length?'<table class="tbl"><thead><tr><th>Clasificación</th><th class="r">Monto</th></tr></thead><tbody>'+clsBot.map(([l,v])=>`<tr><td>${l}</td><td class="r">${fmt(v)}</td></tr>`).join('')+'</tbody></table>':'<div style="font-size:12px;color:var(--ink3);padding:8px">Sin datos</div>'}</div></div>
+  </div>
+
+  <div style="margin-top:12px"><div class="sec">Historial mensual</div><div class="card">${renderHistorial(d.historial,d.cap,d.fac)}</div></div>
   `;
 }
 
@@ -730,8 +848,8 @@ function renderResumen(){
   const xfac=cap-fac;
   const pct=meta>0?Math.min(100,Math.round(cap/meta*100)):0;
 
-  s('r-cap',fmt(cap));s('r-fac',fmt(fac));s('r-xfac',fmt(xfac));s('r-proy',fmt(proy));
-  s('r-pct',pct+'%');
+  s('r-meta',fmt(meta));s('r-cap',fmt(cap));s('r-fac',fmt(fac));s('r-xfac',fmt(xfac));s('r-proy',fmt(proy));
+  s('r-pct',pct+'%');s('r-pct2',pct+'%');
   const rb=document.getElementById('r-bar');if(rb)rb.style.width=pct+'%';
 
   // Brecha y plan diario sucursal
@@ -742,6 +860,8 @@ function renderResumen(){
   const planDiario=diasR>0&&brecha>0?Math.round(brecha/diasR):0;
   const ritmoActual=diasT>0?Math.round(cap/diasT):0;
   s('r-brecha',brecha>0?fmt(brecha):'✓ Meta alcanzada');
+  const bPct=meta>0?Math.round(brecha/meta*100):0;
+  s('r-brecha-pct',brecha>0?bPct+'% de meta pendiente ('+diasR+' días restantes)':'Meta alcanzada');
   s('r-plan-diario',planDiario>0?fmt(planDiario):'—');
   s('r-ritmo',fmt(ritmoActual));
 
@@ -776,13 +896,13 @@ function renderResumen(){
   const ae=document.getElementById('tbl-areas');
   if(ae){
     ae.innerHTML=[
-      ['Personas','Oscar B.',o?o.cap:null,o?o.fac:null,'var(--oscar)'],
-      ['Licitaciones','Diego E.',d?d.cap:null,d?d.fac:null,'var(--diego)'],
-      ['Ecommerce','Benjamín A.',b?b.cap:null,b?b.fac:null,'var(--benj)'],
-      ['Tattersall','Diego+Oscar',t?t.vtotalCalc:null,t?t.facturado:null,'var(--tatt)'],
+      ['Personas','Oscar Bahamonde',o?o.cap:null,o?o.fac:null,'var(--oscar)'],
+      ['Licitaciones','Diego Encina',d?d.cap:null,d?d.fac:null,'var(--diego)'],
+      ['Ecommerce','Benjamín Aguayo',b?b.cap:null,b?b.fac:null,'var(--benj)'],
+      ['Tattersall','Diego + Oscar',t?t.vtotalCalc:null,t?t.facturado:null,'var(--tatt)'],
     ].map(([area,vend,cap,fac,color])=>{
       const xf=cap!==null&&fac!==null?cap-fac:null;
-      return'<tr><td><span style="color:'+color+';font-weight:700">'+area+'</span></td><td>'+vend+'</td><td class="r">'+(cap!==null?fmt(cap):'—')+'</td><td class="r">'+(fac!==null?fmt(fac):'—')+'</td><td class="r">'+(xf!==null?fmt(xf):'—')+'</td></tr>';
+      return'<tr><td><strong style="color:'+color+'">'+area+'</strong></td><td><strong>'+vend+'</strong></td><td class="r"><strong>'+(cap!==null?fmt(cap):'—')+'</strong></td><td class="r"><strong>'+(fac!==null?fmt(fac):'—')+'</strong></td><td class="r"><strong>'+(xf!==null?fmt(xf):'—')+'</strong></td></tr>';
     }).join('');
   }
 
@@ -800,10 +920,12 @@ function renderResumen(){
       const pd=dr>0&&br>0?Math.round(br/dr):0;
       const pct=vd.meta>0?Math.min(100,Math.round(vd.cap/vd.meta*100)):0;
       const pctColor=pct>=80?'var(--green)':pct>=50?'var(--yellow)':'var(--red)';
-      return'<tr><td><span style="color:'+color+';font-weight:700">'+nombre+'</span></td>'
+      const brPct=vd.meta>0?Math.round(br/vd.meta*100):0;
+      return'<tr><td><strong style="color:'+color+'">'+nombre+'</strong></td>'
         +'<td class="r">'+fmt(vd.meta)+'</td>'
         +'<td class="r">'+fmt(vd.cap)+'</td>'
         +'<td class="r" style="color:'+(br>0?'var(--red)':'var(--green)')+'">'+(br>0?fmt(br):'✓')+'</td>'
+        +'<td class="r" style="color:'+(br>0?'var(--red)':'var(--green)')+'">'+(br>0?brPct+'%':'0%')+'</td>'
         +'<td class="r" style="color:var(--yellow)">'+(pd>0?fmt(pd):'—')+'</td>'
         +'<td class="r" style="color:'+pctColor+'">'+pct+'%</td></tr>';
     }).join('');
@@ -814,7 +936,50 @@ function renderResumen(){
       ['Oscar Bahamonde',o?o.cot:null,o?o.cap:null,o?o.tasa:null],
       ['Diego Encina',d?d.cot:null,d?d.cap:null,d?d.tasa:null],
       ['Benjamín Aguayo',b?b.cot:null,b?b.cap:null,b?b.tasa:null],
-    ].map(([v,cot,cap,tasa])=>'<tr><td>'+v+'</td><td class="r">'+(cot!==null?fmt(cot):'—')+'</td><td class="r">'+(cap!==null?fmt(cap):'—')+'</td><td class="r">'+(tasa||'—')+'</td></tr>').join('');
+    ].map(([v,cot,cap,tasa])=>'<tr><td><strong>'+v+'</strong></td><td class="r"><strong>'+(cot!==null?fmt(cot):'—')+'</strong></td><td class="r"><strong>'+(cap!==null?fmt(cap):'—')+'</strong></td><td class="r"><strong>'+(tasa||'—')+'</strong></td></tr>').join('');
+  }
+
+  // Historial diario sucursal (merge all vendors)
+  const hds=document.getElementById('hist-diario-sucursal');
+  if(hds&&(o||d||b)){
+    const allDays={};
+    const mergeVendor=(vd)=>{if(!vd||!vd.histDiario)return;vd.histDiario.forEach(r=>{if(!allDays[r.day])allDays[r.day]={day:r.day,cap:0,fac:0,n:0};allDays[r.day].cap+=r.cap;allDays[r.day].fac+=r.fac;allDays[r.day].n+=r.n;});};
+    mergeVendor(o);mergeVendor(d);mergeVendor(b);
+    const dr2=Object.values(allDays).sort((a,b2)=>a.day-b2.day);
+    hds.innerHTML=renderHistDiario(dr2,'var(--blue)','Sucursal Talca');
+  }
+
+  // Historial diario por área
+  const hda=document.getElementById('hist-diario-areas');
+  if(hda&&(o||d||b)){
+    const now2=new Date();
+    const allD2=new Set();
+    [o,d,b].forEach(vd=>{if(vd&&vd.histDiario)vd.histDiario.forEach(r=>allD2.add(r.day));});
+    const dySorted=[...allD2].sort((a,b2)=>a-b2);
+    if(!dySorted.length){hda.innerHTML='<div class="loading">Sin datos</div>';}
+    else{
+      const getD=(vd,day)=>vd&&vd.histDiario?vd.histDiario.find(r=>r.day===day)||{cap:0,fac:0}:{cap:0,fac:0};
+      hda.innerHTML='<div style="overflow-x:auto"><table class="tbl" style="min-width:520px"><thead><tr><th>Día</th><th class="r" style="color:var(--oscar)">Oscar</th><th class="r" style="color:var(--diego)">Diego</th><th class="r" style="color:var(--benj)">Benjamín</th><th class="r">Total Cap.</th><th class="r" style="color:var(--blue)">Total Fact.</th></tr></thead><tbody>'+
+      dySorted.map(day=>{
+        const dt2=new Date(now2.getFullYear(),now2.getMonth(),day);
+        const dow=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'][dt2.getDay()];
+        const isHoy=day===now2.getDate();
+        const ov=getD(o,day),dv=getD(d,day),bv=getD(b,day);
+        const totCap=(ov.cap||0)+(dv.cap||0)+(bv.cap||0);
+        const totFac=(ov.fac||0)+(dv.fac||0)+(bv.fac||0);
+        return`<tr style="${isHoy?'background:var(--bg2);':''}"><td><strong>${dow} ${String(day).padStart(2,'0')}</strong></td><td class="r" style="color:var(--oscar)">${(ov.cap||0)>0?fmt(ov.cap):'—'}</td><td class="r" style="color:var(--diego)">${(dv.cap||0)>0?fmt(dv.cap):'—'}</td><td class="r" style="color:var(--benj)">${(bv.cap||0)>0?fmt(bv.cap):'—'}</td><td class="r"><strong>${totCap>0?fmt(totCap):'—'}</strong></td><td class="r" style="color:var(--blue)">${totFac>0?fmt(totFac):'—'}</td></tr>`;
+      }).join('')+'</tbody></table></div>';
+    }
+  }
+
+  // Semanas sucursal
+  const ss=document.getElementById('semanas-sucursal');
+  if(ss&&(o||d||b)){
+    const semMap2={};
+    const mergeSem=(vd)=>{if(!vd||!vd.semanas)return;vd.semanas.forEach(s=>{if(!semMap2[s.wk])semMap2[s.wk]={wk:s.wk,label:s.label,capV:0,capN:0,facV:0,facN:0};semMap2[s.wk].capV+=s.capV;semMap2[s.wk].capN+=s.capN;semMap2[s.wk].facV+=s.facV;semMap2[s.wk].facN+=s.facN;});};
+    mergeSem(o);mergeSem(d);mergeSem(b);
+    const semRows2=Object.values(semMap2).sort((a,b2)=>a.wk-b2.wk);
+    ss.innerHTML=renderSemanas(semRows2,'var(--blue)');
   }
 
   // Historial sucursal: comparativo 2025 vs 2026 mes a mes
@@ -911,7 +1076,7 @@ async function loadSheet(name){
   }else{
     const prefixMap={oscar:'os',diego:'di',benjamin:'bn'};
     const tabMap={oscar:'v1',diego:'v2',benjamin:'v3'};
-    DATA[name]=parseVendor(data);
+    DATA[name]=parseVendor(data,name);
     renderVendorTab(tabMap[name],prefixMap[name],DATA[name]);
   }
   renderResumen();
@@ -996,7 +1161,15 @@ function processRelbase(buffer){
   renderResumen();
 }
 
-window.onload=()=>refreshAll();
+window.onload=()=>{
+  if(sessionStorage.getItem('rosso_auth')==='1'){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('main-app').style.display='block';
+    refreshAll();
+  }else{
+    const pi=document.getElementById('pwd-input');if(pi)pi.focus();
+  }
+};
 </script>
 </body>
 </html>
