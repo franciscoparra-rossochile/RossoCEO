@@ -393,20 +393,33 @@ function isToday(cellVal){
   const now=new Date();
   return dt.getFullYear()===now.getFullYear()&&dt.getMonth()===now.getMonth()&&dt.getDate()===now.getDate();
 }
-function getBizWeek(date){
+// Semana calendario: cada semana va de lunes a domingo.
+// La S1 empieza en el día 1 del mes (aunque sea miércoles).
+// Devuelve número de semana del mes (1-based) según semana calendario L-D.
+function getCalWeek(date){
   const y=date.getFullYear(),mo=date.getMonth(),day=date.getDate();
-  let bizDays=0;
-  for(let d2=1;d2<=day;d2++){if(isWeekday(new Date(y,mo,d2)))bizDays++;}
-  return Math.ceil(bizDays/5)||1;
+  // Día 1 del mes: ¿qué día de semana es? (0=Dom,1=Lun...6=Sáb)
+  const firstDow=new Date(y,mo,1).getDay();
+  // Lunes de la semana que contiene el día 1
+  // Si firstDow=0(Dom), la semana empieza -6; si =1(Lun), 0; si =2(Mar), -1...
+  const offsetToMonday=firstDow===0?-6:1-firstDow;
+  // Número de días desde el lunes "base" al día actual
+  const daysSinceBase=(day-1)-offsetToMonday;
+  return Math.floor(daysSinceBase/7)+1;
 }
 function weekLabel(date){
   const y=date.getFullYear(),mo=date.getMonth(),meses=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-  const wk=getBizWeek(date);
-  let first=null,last=null,bizCount=0;
+  const wk=getCalWeek(date);
+  // Calcular primer y último día hábil del mes en esta semana calendario
   const daysInMonth=new Date(y,mo+1,0).getDate();
-  for(let d2=1;d2<=daysInMonth;d2++){const dd=new Date(y,mo,d2);if(isWeekday(dd)){bizCount++;const wn=Math.ceil(bizCount/5);if(wn===wk){if(!first)first=d2;last=d2;}}}
-  return`S${wk} · ${String(first||1).padStart(2,'0')}-${String(last||7).padStart(2,'0')} ${meses[mo]}`;
+  let first=null,last=null;
+  for(let d2=1;d2<=daysInMonth;d2++){
+    const dd=new Date(y,mo,d2);
+    if(isWeekday(dd)&&getCalWeek(dd)===wk){if(!first)first=d2;last=d2;}
+  }
+  return`S${wk} · ${String(first||1).padStart(2,'0')}-${String(last||daysInMonth).padStart(2,'0')} ${meses[mo]}`;
 }
+function getBizWeek(date){return getCalWeek(date);}
 function findDetailHeader(rows){
   for(let i=0;i<rows.length;i++){
     const c0=(rows[i][0]||'').toString().trim().toUpperCase();
