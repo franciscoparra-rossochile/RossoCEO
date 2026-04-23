@@ -126,6 +126,11 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
     <div class="kpi ye"><div class="kl">Por facturar</div><div class="kv ye" id="r-xfac">$&mdash;</div><div class="ks">Efectivo circulante</div></div>
     <div class="kpi re"><div class="kl">Proyeccion cierre mes</div><div class="kv re" id="r-proy">$&mdash;</div><div class="ks">A ritmo actual</div></div>
   </div>
+  <div class="g3" style="margin-top:-8px;margin-bottom:20px">
+    <div class="kpi re"><div class="kl">Brecha sucursal para meta</div><div class="kv re" id="r-brecha">$&mdash;</div><div class="ks">Falta para cumplir meta</div></div>
+    <div class="kpi ye"><div class="kl">Plan diario requerido</div><div class="kv ye" id="r-plan-diario">$&mdash;</div><div class="ks">Para cubrir brecha en días restantes</div></div>
+    <div class="kpi gr"><div class="kl">Ritmo actual / día</div><div class="kv gr" id="r-ritmo">$&mdash;</div><div class="ks">Promedio real del mes</div></div>
+  </div>
 
   <div class="sec">Pipeline sucursal</div>
   <div class="card" id="pipe-global" style="margin-bottom:20px"><div class="loading"><span class="sp"></span>Cargando...</div></div>
@@ -149,6 +154,14 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
         </table>
       </div>
     </div>
+  </div>
+
+  <div class="sec">Brecha y plan diario por vendedor</div>
+  <div class="card nb" style="margin-bottom:20px;overflow-x:auto">
+    <table class="tbl" style="min-width:500px">
+      <thead><tr><th>Vendedor</th><th class="r">Meta</th><th class="r">Capturado</th><th class="r">Brecha</th><th class="r">Plan diario</th><th class="r">Avance</th></tr></thead>
+      <tbody id="tbl-brechas"><tr><td colspan="6" class="loading">Cargando...</td></tr></tbody>
+    </table>
   </div>
 
   <div class="sec">Comparativo interanual &mdash; ventas netas (RelBase)</div>
@@ -180,12 +193,8 @@ body{background:var(--bg);color:var(--ink);font-family:"Cabinet Grotesk",sans-se
     <div style="display:grid;grid-template-columns:50px 1fr 90px 70px;gap:8px;align-items:center;margin-bottom:4px">
       <span class="yr-l" style="color:var(--green);font-weight:800">2026</span><div class="yr-t"><div class="yr-f" id="bar-2026" style="width:0%;background:var(--green);opacity:0.7"></div></div><span class="yr-v" id="val-2026" style="color:var(--green)">$&mdash;</span><span style="font-family:IBM Plex Mono,monospace;font-size:10px;text-align:right" id="pct-2026">&mdash;</span>
     </div>
-    <div style="font-size:10px;font-family:IBM Plex Mono,monospace;color:var(--ink3);margin-top:8px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-size:10px;font-family:IBM Plex Mono,monospace;color:var(--ink3);margin-top:8px">
       <span>Fuente: RelBase &middot; Total ventas con IVA &middot; Actualizado 22-04-2026</span>
-      <label style="cursor:pointer;font-size:10px;color:var(--blue);border:1px solid var(--blue);padding:2px 8px;font-family:IBM Plex Mono,monospace;">
-        &#8679; Actualizar con RelBase
-        <input type="file" accept=".xlsx,.csv" style="display:none" onchange="loadRelbase(this)">
-      </label>
     </div>
   </div>
 
@@ -413,6 +422,23 @@ function fetchSheet(url){
   });
 }
 
+// Clasificaciones por vendedor — categorías correctas de servicio
+const CLASIFICACIONES_OSCAR = [
+  'Cambio de aceite','Mantenimiento express','Mantenimiento completo',
+  'DPF Esencial','DPF Avanzado','DPF Premium','DPF Integral',
+  'Frenos','Reparaciones','Reprogramacion','Diagnósticos','Escaner','Neumáticos'
+];
+const CLASIFICACIONES_DIEGO = [
+  'Compra ágil región VII: Servicios','Compra ágil región VII: Repuestos','Compra ágil región VII: Neumaticos',
+  'Compra ágil nacional: Neumaticos','Licitación <100UTM: Servicios','Licitación <100UTM: Neumáticos',
+  'Empresas','Personas'
+];
+const CLASIFICACIONES_BENJAMIN = [
+  'Neumaticos','Cubre Pick up','Suspensiones','Thule','Calce perfecto',
+  'Posaderas','Bumpers','Organizadores','Enganches','Antivuelcos',
+  'Accesorios','Reprogramaciones','Personas','Licitaciones'
+];
+
 // Parse vendor (Oscar/Diego/Benjamin)
 function parseVendor(data){
   if(!data)return null;
@@ -440,19 +466,22 @@ function parseVendor(data){
   const novendida=clp(g('NO VENDIDA'));
   const xfac=cap-fac;
 
-  // Clasificaciones
-  const SKIP=['META','META MENSUAL','META DIARIA','META SEMANAL','META DE FACTURACION','TATTERSALL','NEUMATICOS AGRICOLAS'];
+  // Clasificaciones — solo categorías de servicio (excluir estados de pipeline)
+  const SKIP_STATUS=['META','META MENSUAL','META DIARIA','META SEMANAL','META DE FACTURACION','TATTERSALL','NEUMATICOS AGRICOLAS',
+    'VENDIDA','COTIZACION ENVIADA','EN ESPERA','NO VENDIDA','COTIZANDO','HACER SEGUIMIENTO','CAPTURACION DE VENTA',
+    'FACTURADO','PROYECCION','PROYECCION REAL','TASA DE CIERRE','TICKET PROMEDIO DIARIO','DIAS TRANSCURRIDOS',
+    'DIAS COMPLETADOS','DIAS RESTANTES','TOTAL COTIZACIONES ENVIADAS','TOTAL COTIZADO'];
   let clasificaciones=[];
   let clsIdx=-1;
   for(let i=0;i<rows.length;i++){
     if(rows[i].some(c=>(c||'').toString().trim().toUpperCase()==='CLASIFICACIONES')){clsIdx=i;break;}
   }
   if(clsIdx>=0){
-    for(let i=clsIdx+1;i<Math.min(clsIdx+25,rows.length);i++){
+    for(let i=clsIdx+1;i<Math.min(clsIdx+30,rows.length);i++){
       const r=rows[i];
       const lbl=(r[3]||r[0]||'').toString().trim();
       const val=r[4]||r[1]||'';
-      if(lbl&&clp(val)>0&&!SKIP.includes(lbl.toUpperCase()))
+      if(lbl&&!SKIP_STATUS.includes(lbl.toUpperCase()))
         clasificaciones.push([lbl,clp(val)]);
     }
   }
@@ -465,7 +494,55 @@ function parseVendor(data){
 
   const today=calcToday(rows);
 
-  return{cap,meta,proy,fac,cot,tasa,ticket,diast,diasr,vendida,enviada,espera,seguimiento,cotizando,novendida,xfac,clasificaciones,historial,today,rawRows:rows};
+  // Semanas del mes: agrupar detalle por semana
+  const semanas=calcSemanas(rows);
+
+  return{cap,meta,proy,fac,cot,tasa,ticket,diast,diasr,vendida,enviada,espera,seguimiento,cotizando,novendida,xfac,clasificaciones,historial,today,semanas,rawRows:rows};
+}
+
+// Calculate weekly sales from row detail
+function calcSemanas(rows){
+  let headerIdx=-1;
+  for(let i=0;i<rows.length;i++){
+    const c0=(rows[i][0]||'').toString().trim().toUpperCase();
+    const c6=(rows[i][6]||'').toString().trim().toUpperCase();
+    const c8=(rows[i][8]||'').toString().trim().toUpperCase();
+    if(c0==='FECHA'&&(c6.includes('PROCESO')||c8.includes('VALOR'))){headerIdx=i;break;}
+  }
+  if(headerIdx<0)return[];
+  const hdrs=rows[headerIdx].map(h=>(h||'').toString().trim().toUpperCase());
+  const iP=hdrs.findIndex(h=>h.includes('PROCESO'));
+  const iV=hdrs.findIndex(h=>h.includes('VALOR')&&h.includes('COT'));
+  const iPf=iP>=0?iP:6;
+  const iVf=iV>=0?iV:8;
+  const semMap={};
+  for(let i=headerIdx+1;i<rows.length;i++){
+    const row=rows[i];
+    const cellDate=row[0];
+    if(!cellDate)continue;
+    let fecha;
+    const cs=cellDate.toString().trim();
+    if(!cs||cs==='FECHA')continue;
+    // try parse
+    const parts=cs.split(/[-\/]/);
+    if(parts.length===3){
+      const d=parseInt(parts[0]),m=parseInt(parts[1]),y=parseInt(parts[2]);
+      if(!isNaN(d)&&!isNaN(m)&&!isNaN(y))fecha=new Date(y,m-1,d);
+    }
+    if(!fecha||isNaN(fecha.getTime()))continue;
+    const proceso=(row[iPf]||'').toString().trim().toUpperCase();
+    const valor=clp(row[iVf]||0);
+    if(valor<=0)continue;
+    // Only count captured sales
+    if(proceso!=='VENDIDA'&&proceso!=='CAPTURADO')continue;
+    // Get week number of month (1-5)
+    const weekNum=Math.ceil(fecha.getDate()/7);
+    const key='S'+weekNum;
+    if(!semMap[key])semMap[key]={sem:key,n:0,v:0};
+    semMap[key].n++;
+    semMap[key].v+=valor;
+  }
+  return Object.values(semMap).sort((a,b)=>a.sem.localeCompare(b.sem));
 }
 
 // Render vendor tab
@@ -477,6 +554,13 @@ function renderVendorTab(tabId,prefix,d){
   const now=new Date();
   const todayLabel=now.toLocaleDateString('es-CL',{day:'numeric',month:'long'});
 
+  // Brecha y plan diario
+  const brecha=meta>0?meta-d.cap:0;
+  const diasR=parseInt(d.diasr)||0;
+  const planDiario=diasR>0&&brecha>0?Math.round(brecha/diasR):0;
+  const diasT=parseInt(d.diast)||1;
+  const ritmoActual=diasT>0?Math.round(d.cap/diasT):0;
+
   const pipe=()=>{
     const vals=[d.vendida,d.enviada,d.espera,d.seguimiento,d.cotizando,d.novendida];
     const labels=['VENDIDA','COT. ENVIADA','EN ESPERA','SEGUIMIENTO','COTIZANDO','NO VENDIDA'];
@@ -487,38 +571,63 @@ function renderVendorTab(tabId,prefix,d){
 
   const claif=()=>{
     if(!d.clasificaciones||!d.clasificaciones.length)return '<div style="font-size:12px;color:var(--ink3);padding:12px 0;text-align:center">Sin datos</div>';
-    return '<table class="tbl"><thead><tr><th>Clasificacion</th><th class="r">Cotizado</th></tr></thead><tbody>'+
-      d.clasificaciones.sort((a,b)=>b[1]-a[1]).map(([l,v])=>'<tr><td>'+l+'</td><td class="r">'+fmt(v)+'</td></tr>').join('')+
+    const total=d.clasificaciones.reduce((s,[,v])=>s+v,0);
+    return '<table class="tbl"><thead><tr><th>Clasificacion</th><th class="r">Cotizado</th><th class="r">%</th></tr></thead><tbody>'+
+      d.clasificaciones.sort((a,b)=>b[1]-a[1]).map(([l,v])=>{
+        const pct=total>0?((v/total)*100).toFixed(1)+'%':'—';
+        return'<tr><td>'+l+'</td><td class="r">'+fmt(v)+'</td><td class="r" style="color:var(--ink3)">'+pct+'</td></tr>';
+      }).join('')+
       '</tbody></table>';
   };
 
   const hist=()=>{
     if(!d.historial||!d.historial.length)return '<div style="font-size:12px;color:var(--ink3);padding:12px 0;text-align:center">Actualiza el Apps Script a v4 para ver historial</div>';
     const maxH=Math.max(...d.historial.map(h=>h.cap),d.cap,1);
-    return d.historial.map(h=>'<div class="hist-row"><span class="hist-mes">'+h.name+'</span><div class="hist-bar"><div class="hist-fill" style="width:'+Math.round(h.cap/maxH*100)+'%;background:var(--ink3)"></div></div><span class="hist-val">'+fmt(h.cap)+'</span><span class="hist-pct">'+fmt(h.fac)+'</span></div>').join('')+
-    '<div class="hist-row"><span class="hist-mes" style="color:var(--ink);font-weight:700">Mes actual</span><div class="hist-bar"><div class="hist-fill" style="width:100%;background:var(--green)"></div></div><span class="hist-val" style="color:var(--green)">'+fmt(d.cap)+'</span><span class="hist-pct">'+fmt(d.fac)+'</span></div>';
+    return '<table class="tbl"><thead><tr><th>Mes</th><th class="r">Capturado</th><th class="r">Facturado</th></tr></thead><tbody>'+
+      d.historial.map(h=>'<tr><td>'+h.name+'</td><td class="r">'+fmt(h.cap)+'</td><td class="r">'+fmt(h.fac)+'</td></tr>').join('')+
+      '<tr><td><strong>Mes actual</strong></td><td class="r" style="color:var(--green)"><strong>'+fmt(d.cap)+'</strong></td><td class="r"><strong>'+fmt(d.fac)+'</strong></td></tr>'
+      +'</tbody></table>';
   };
+
+  const semanas=()=>{
+    if(!d.semanas||!d.semanas.length)return '<div style="font-size:12px;color:var(--ink3);padding:8px 0">Sin detalle semanal</div>';
+    const maxS=Math.max(...d.semanas.map(s=>s.v),1);
+    return d.semanas.map(s=>'<div class="pipe-row"><span class="pipe-l">'+s.sem+' ('+s.n+' ventas)</span><div class="pipe-t"><div class="pipe-f" style="width:'+Math.round(s.v/maxS*100)+'%;background:var(--blue)"></div></div><span class="pipe-v">'+fmt(s.v)+'</span></div>').join('');
+  };
+
+  const accentColor=prefix==='os'?'var(--oscar)':prefix==='di'?'var(--diego)':'var(--benj)';
 
   el.innerHTML=`
   <div class="sec">Hoy &mdash; ${todayLabel}</div>
   <div class="g3" style="margin-bottom:20px">
     <div class="kpi ${prefix}"><div class="kl">Cotizaciones enviadas hoy</div><div class="kv ${prefix}">${fmt(d.today.cotV)}</div><div class="ks">${d.today.cotN} cotizaci${d.today.cotN===1?'ón':'ones'}</div></div>
-    <div class="kpi gr"><div class="kl">Venta capturada hoy</div><div class="kv gr">${fmt(d.today.capV)}</div><div class="ks">${d.today.capN} venta${d.today.capN===1?'':'s'} cerradas</div></div>
+    <div class="kpi gr"><div class="kl">Venta capturada hoy</div><div class="kv gr">${fmt(d.today.capV)}</div><div class="ks">${d.today.capN} venta${d.today.capN===1?'':'s'} cerrada${d.today.capN===1?'':'s'}</div></div>
     <div class="kpi bl"><div class="kl">Venta facturada hoy</div><div class="kv bl">${fmt(d.today.facV)}</div><div class="ks">${d.today.facN} factura${d.today.facN===1?'':'s'}</div></div>
   </div>
-  <div class="sec">Mes actual</div>
+
+  <div class="sec">Mes actual &mdash; Plan vs Rendimiento</div>
   <div class="g4">
-    <div class="kpi ${prefix}"><div class="kl">Total capturado</div><div class="kv ${prefix}">${fmt(d.cap)}</div><div class="ks">Meta: ${fmt(d.meta)}</div><div class="pb"><div class="pbl"><span>${pct}%</span><span>meta</span></div><div class="pbt"><div class="pbf" style="background:var(--${prefix==='os'?'oscar':prefix==='di'?'diego':'benj'});width:${pct}%"></div></div></div></div>
+    <div class="kpi ${prefix}"><div class="kl">Total capturado</div><div class="kv ${prefix}">${fmt(d.cap)}</div><div class="ks">Meta: ${fmt(meta)}</div><div class="pb"><div class="pbl"><span>${pct}%</span><span>meta</span></div><div class="pbt"><div class="pbf" style="background:${accentColor};width:${pct}%"></div></div></div></div>
     <div class="kpi bl"><div class="kl">Total facturado</div><div class="kv bl">${fmt(d.fac)}</div><div class="ks">Cobrado en caja</div></div>
     <div class="kpi ye"><div class="kl">Por facturar</div><div class="kv ye">${fmt(d.xfac)}</div><div class="ks">Efectivo circulante</div></div>
     <div class="kpi gr"><div class="kl">Total cotizado</div><div class="kv gr">${fmt(d.cot)}</div><div class="ks">Cotizaciones enviadas</div></div>
   </div>
   <div class="g4" style="margin-top:-8px">
-    <div class="kpi bl"><div class="kl">Proyeccion mes</div><div class="kv bl">${fmt(d.proy)}</div></div>
-    <div class="kpi gr"><div class="kl">Tasa de cierre</div><div class="kv gr">${d.tasa||'—'}</div></div>
-    <div class="kpi ye"><div class="kl">Ticket promedio / dia</div><div class="kv ye">${fmt(d.ticket)}</div></div>
-    <div class="kpi re"><div class="kl">Dias restantes</div><div class="kv re">${d.diasr}</div><div class="ks">Transcurridos: ${d.diast}</div></div>
+    <div class="kpi re"><div class="kl">Brecha para la meta</div><div class="kv re">${brecha>0?fmt(brecha):'✓ Meta alcanzada'}</div><div class="ks">Falta para completar ${fmt(meta)}</div></div>
+    <div class="kpi ye"><div class="kl">Plan diario requerido</div><div class="kv ye">${planDiario>0?fmt(planDiario):'—'}</div><div class="ks">Para cubrir brecha en ${diasR} días restantes</div></div>
+    <div class="kpi gr"><div class="kl">Ritmo actual / día</div><div class="kv gr">${fmt(ritmoActual)}</div><div class="ks">Promedio real (${diasT} días transcurridos)</div></div>
+    <div class="kpi bl"><div class="kl">Proyeccion mes</div><div class="kv bl">${fmt(d.proy)}</div><div class="ks">A ritmo actual</div></div>
   </div>
+  <div class="g4" style="margin-top:-8px">
+    <div class="kpi gr"><div class="kl">Tasa de cierre</div><div class="kv gr">${d.tasa||'—'}</div></div>
+    <div class="kpi ye"><div class="kl">Ticket promedio / día</div><div class="kv ye">${fmt(d.ticket)}</div></div>
+    <div class="kpi re"><div class="kl">Días restantes</div><div class="kv re">${d.diasr}</div><div class="ks">Transcurridos: ${d.diast}</div></div>
+    <div class="kpi ${prefix}"><div class="kl">% de avance meta</div><div class="kv ${prefix}">${pct}%</div></div>
+  </div>
+
+  <div class="sec">Ventas por semana (mes actual)</div>
+  <div class="card" style="margin-bottom:12px">${semanas()}</div>
+
   <div class="g2">
     <div><div class="sec">Pipeline</div><div class="card nb">${pipe()}</div></div>
     <div><div class="sec">Cotizaciones por tipo de servicio</div><div class="card nb">${claif()}</div></div>
@@ -625,6 +734,17 @@ function renderResumen(){
   s('r-pct',pct+'%');
   const rb=document.getElementById('r-bar');if(rb)rb.style.width=pct+'%';
 
+  // Brecha y plan diario sucursal
+  const brecha=meta>0?Math.max(0,meta-cap):0;
+  // Días restantes: usar los de Oscar como referencia del mes
+  const diasR=o?parseInt(o.diasr)||0:d?parseInt(d.diasr)||0:b?parseInt(b.diasr)||0:0;
+  const diasT=o?parseInt(o.diast)||1:d?parseInt(d.diast)||1:b?parseInt(b.diast)||1:1;
+  const planDiario=diasR>0&&brecha>0?Math.round(brecha/diasR):0;
+  const ritmoActual=diasT>0?Math.round(cap/diasT):0;
+  s('r-brecha',brecha>0?fmt(brecha):'✓ Meta alcanzada');
+  s('r-plan-diario',planDiario>0?fmt(planDiario):'—');
+  s('r-ritmo',fmt(ritmoActual));
+
   // Hoy sucursal
   const now=new Date();
   s('r-hoy-fecha',now.toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'}));
@@ -666,13 +786,34 @@ function renderResumen(){
     }).join('');
   }
 
-  // Tabla tasas
+  // Tabla brechas por vendedor
+  const be=document.getElementById('tbl-brechas');
+  if(be){
+    const vendedores=[
+      {nombre:'Oscar Bahamonde',color:'var(--oscar)',d:o,diasR:o?parseInt(o.diasr)||0:0},
+      {nombre:'Diego Encina',color:'var(--diego)',d:d,diasR:d?parseInt(d.diasr)||0:0},
+      {nombre:'Benjamín Aguayo',color:'var(--benj)',d:b,diasR:b?parseInt(b.diasr)||0:0},
+    ];
+    be.innerHTML=vendedores.map(({nombre,color,d:vd,diasR:dr})=>{
+      if(!vd)return'<tr><td style="color:'+color+';font-weight:700">'+nombre+'</td><td colspan="5" class="r" style="color:var(--ink3)">Sin datos</td></tr>';
+      const br=vd.meta>0?Math.max(0,vd.meta-vd.cap):0;
+      const pd=dr>0&&br>0?Math.round(br/dr):0;
+      const pct=vd.meta>0?Math.min(100,Math.round(vd.cap/vd.meta*100)):0;
+      const pctColor=pct>=80?'var(--green)':pct>=50?'var(--yellow)':'var(--red)';
+      return'<tr><td><span style="color:'+color+';font-weight:700">'+nombre+'</span></td>'
+        +'<td class="r">'+fmt(vd.meta)+'</td>'
+        +'<td class="r">'+fmt(vd.cap)+'</td>'
+        +'<td class="r" style="color:'+(br>0?'var(--red)':'var(--green)')+'">'+(br>0?fmt(br):'✓')+'</td>'
+        +'<td class="r" style="color:var(--yellow)">'+(pd>0?fmt(pd):'—')+'</td>'
+        +'<td class="r" style="color:'+pctColor+'">'+pct+'%</td></tr>';
+    }).join('');
+  }
   const te=document.getElementById('tbl-tasas');
   if(te){
     te.innerHTML=[
-      ['Oscar B.',o?o.cot:null,o?o.cap:null,o?o.tasa:null],
-      ['Diego E.',d?d.cot:null,d?d.cap:null,d?d.tasa:null],
-      ['Benjín A.',b?b.cot:null,b?b.cap:null,b?b.tasa:null],
+      ['Oscar Bahamonde',o?o.cot:null,o?o.cap:null,o?o.tasa:null],
+      ['Diego Encina',d?d.cot:null,d?d.cap:null,d?d.tasa:null],
+      ['Benjamín Aguayo',b?b.cot:null,b?b.cap:null,b?b.tasa:null],
     ].map(([v,cot,cap,tasa])=>'<tr><td>'+v+'</td><td class="r">'+(cot!==null?fmt(cot):'—')+'</td><td class="r">'+(cap!==null?fmt(cap):'—')+'</td><td class="r">'+(tasa||'—')+'</td></tr>').join('');
   }
 
